@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://sdlt.co.uk/API" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://sdlt.co.uk/API">
+    <xs:element name="GetPrintoutDocuments">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Document" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="DocumentID"/>
+                            <xs:choice>
+                                <xs:element name="PrintoutDocument" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element type="xs:string" name="Data"/>
+                                            <xs:element type="xs:string" name="FileName"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Error">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element type="xs:short" name="Code"/>
+                                            <xs:element type="xs:string" name="Message"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:choice>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

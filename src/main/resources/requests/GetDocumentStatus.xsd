@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://sdlt.co.uk/API" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="GetDocumentsStatus">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Filter" minOccurs="0">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element type="xs:date" name="CreateDateFrom" minOccurs="0"/>
+                            <xs:element type="xs:date" name="CreateDateTo" minOccurs="0"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
