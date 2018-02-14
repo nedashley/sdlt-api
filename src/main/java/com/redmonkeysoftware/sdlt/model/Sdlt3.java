@@ -6,7 +6,7 @@ public class Sdlt3 implements Serializable {
 
     private static final long serialVersionUID = 7970339525165775481L;
     @SdltXmlValue("SDLT3_PropertyTypeCode")
-    protected String type;
+    protected PropertyType type;
     @SdltXmlValue("SDLT3_PropertyLocalAuthorityCode")
     protected String localAuthority;
     @SdltXmlValue("SDLT3_PropertyTitleNumber")
@@ -34,15 +34,15 @@ public class Sdlt3 implements Serializable {
     @SdltXmlValue("SDLT3_PropertyPlanAttachedYesNo")
     protected boolean planAttached;
     @SdltXmlValue("SDLT3_InterestCreatedCode")
-    protected String interestCreated;
+    protected InterestCreatedType interestCreated;
     @SdltXmlValue("SDLT3_InterestCreatedCodeDetailed")
     protected String interestedCreatedDetailed;
 
-    public String getType() {
+    public PropertyType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(PropertyType type) {
         this.type = type;
     }
 
@@ -150,11 +150,11 @@ public class Sdlt3 implements Serializable {
         this.planAttached = planAttached;
     }
 
-    public String getInterestCreated() {
+    public InterestCreatedType getInterestCreated() {
         return interestCreated;
     }
 
-    public void setInterestCreated(String interestCreated) {
+    public void setInterestCreated(InterestCreatedType interestCreated) {
         this.interestCreated = interestCreated;
     }
 

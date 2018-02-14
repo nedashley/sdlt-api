@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 public class Sdlt2 implements Serializable {
 
+    private static final long serialVersionUID = 9034711286976521480L;
     @SdltXmlValue("SDLT2_AdditionalVendorOrPuchaser")
-    protected String additionalVendorOrPurchaser;
+    protected AdditionalVendorPurchaserType additionalVendorOrPurchaser;
     @SdltXmlValue("SDLT2_AdditionalVendorPurchaserTitle")
     protected String title;
     @SdltXmlValue("SDLT2_AdditionalVendorPurchaserSurname")
@@ -31,11 +32,11 @@ public class Sdlt2 implements Serializable {
     @SdltXmlValue("SDLT2_AdditionalPurchaserActingAsTrusteeYesNo")
     protected boolean actingAsTrustee;
 
-    public String getAdditionalVendorOrPurchaser() {
+    public AdditionalVendorPurchaserType getAdditionalVendorOrPurchaser() {
         return additionalVendorOrPurchaser;
     }
 
-    public void setAdditionalVendorOrPurchaser(String additionalVendorOrPurchaser) {
+    public void setAdditionalVendorOrPurchaser(AdditionalVendorPurchaserType additionalVendorOrPurchaser) {
         this.additionalVendorOrPurchaser = additionalVendorOrPurchaser;
     }
 

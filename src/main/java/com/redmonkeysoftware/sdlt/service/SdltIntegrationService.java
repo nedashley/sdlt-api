@@ -33,16 +33,16 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
-public class SdltService implements Closeable {
+public class SdltIntegrationService implements Closeable {
 
-    private final static Logger logger = Logger.getLogger(SdltService.class.getName());
+    private final static Logger logger = Logger.getLogger(SdltIntegrationService.class.getName());
     private final String applicationId;
     private final String applicationSecret;
     private final static String endpoint = "https://online.sdlt.co.uk/api/";
     private CloseableHttpClient client = null;
     private SdltAccessToken applicationAccessToken;
 
-    public SdltService(final String applicationId, final String applicationSecret) {
+    public SdltIntegrationService(final String applicationId, final String applicationSecret) {
         this.applicationId = applicationId;
         this.applicationSecret = applicationSecret;
         initialise();

@@ -67,7 +67,7 @@ public class SdltImportRequest implements Serializable {
     @SdltXmlValue("SDLT_TotalConsiderationIncVAT")
     protected BigDecimal totalConsiderationIncVat;
     @SdltXmlValue("SDLT_PurchaserTypeCode")
-    protected String purchaserTypeCode;
+    protected PurchaserType purchaserTypeCode;
     @SdltXmlValue("SDLT_TotalConsiderationVAT")
     protected BigDecimal totalConsiderationVat;
     @SdltXmlValue("SDLT_ConsiderationFormCode1")
@@ -522,11 +522,11 @@ public class SdltImportRequest implements Serializable {
         this.totalConsiderationIncVat = totalConsiderationIncVat;
     }
 
-    public String getPurchaserTypeCode() {
+    public PurchaserType getPurchaserTypeCode() {
         return purchaserTypeCode;
     }
 
-    public void setPurchaserTypeCode(String purchaserTypeCode) {
+    public void setPurchaserTypeCode(PurchaserType purchaserTypeCode) {
         this.purchaserTypeCode = purchaserTypeCode;
     }
 

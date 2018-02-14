@@ -3,16 +3,16 @@ package com.redmonkeysoftware.sdlt.model;
 import org.apache.commons.lang3.StringUtils;
 
 public enum ConsiderationType implements BaseEnumType {
-    CT_30("30", "Cash"),
-    CT_31("31", "Debt"),
-    CT_32("32", "Building Works"),
-    CT_33("33", "Employment"),
-    CT_34("34", "Other (such as annuity)"),
-    CT_35("35", "Shares in a quoted company"),
-    CT_36("36", "Shares in an unquoted company"),
-    CT_37("37", "Other Land"),
-    CT_38("38", "Services"),
-    CT_39("39", "Contingent");
+    CASH("30", "Cash"),
+    DEBT("31", "Debt"),
+    BUILDING_WORKS("32", "Building Works"),
+    EMPLOYMENT("33", "Employment"),
+    OTHER("34", "Other (such as annuity)"),
+    SHARES_QUOTED("35", "Shares in a quoted company"),
+    SHARES_UNQUOTED("36", "Shares in an unquoted company"),
+    OTHER_LAND("37", "Other Land"),
+    SERVICES("38", "Services"),
+    CONTINGENT("39", "Contingent");
     private final String code;
     private final String description;
 

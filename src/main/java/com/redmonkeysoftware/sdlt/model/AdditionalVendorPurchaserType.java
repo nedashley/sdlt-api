@@ -2,15 +2,13 @@ package com.redmonkeysoftware.sdlt.model;
 
 import org.apache.commons.lang3.StringUtils;
 
-public enum TransactionDescriptionType implements BaseEnumType {
-    CONVEYANCE_TRANSFER_WITH_LEASE("A", "Conveyance/Transfer with Lease"),
-    CONVEYANCE_TRANSFER("F", "Conveyance/Transfer"),
-    GRANT_OF_LEASE("L", "Grant of Lease"),
-    OTHER("O", "Other");
+public enum AdditionalVendorPurchaserType implements BaseEnumType {
+    PURCHASER("Purchaser", "Purchaser"),
+    VENDOR("Vendor", "Vendor");
     private final String code;
     private final String description;
 
-    private TransactionDescriptionType(final String code, final String description) {
+    private AdditionalVendorPurchaserType(final String code, final String description) {
         this.code = code;
         this.description = description;
     }
@@ -30,8 +28,8 @@ public enum TransactionDescriptionType implements BaseEnumType {
         return code;
     }
 
-    public static TransactionDescriptionType fromCode(final String code) {
-        for (TransactionDescriptionType ict : values()) {
+    public static AdditionalVendorPurchaserType fromCode(final String code) {
+        for (AdditionalVendorPurchaserType ict : values()) {
             if (StringUtils.equalsIgnoreCase(ict.getCode(), code)) {
                 return ict;
             }
