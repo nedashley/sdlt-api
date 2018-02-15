@@ -28,9 +28,9 @@ public class Sdlt2 implements Serializable {
     @SdltXmlValue("SDLT2_AdditionalVendorPurchaserAddress4")
     protected String address4;
     @SdltXmlValue("SDLT2_PurchaserVendorConnectedYesNo")
-    protected boolean connected;
+    protected Boolean connected;
     @SdltXmlValue("SDLT2_AdditionalPurchaserActingAsTrusteeYesNo")
-    protected boolean actingAsTrustee;
+    protected Boolean actingAsTrustee;
 
     public AdditionalVendorPurchaserType getAdditionalVendorOrPurchaser() {
         return additionalVendorOrPurchaser;
@@ -124,7 +124,7 @@ public class Sdlt2 implements Serializable {
         return connected;
     }
 
-    public void setConnected(boolean connected) {
+    public void setConnected(Boolean connected) {
         this.connected = connected;
     }
 
@@ -132,7 +132,7 @@ public class Sdlt2 implements Serializable {
         return actingAsTrustee;
     }
 
-    public void setActingAsTrustee(boolean actingAsTrustee) {
+    public void setActingAsTrustee(Boolean actingAsTrustee) {
         this.actingAsTrustee = actingAsTrustee;
     }
 }

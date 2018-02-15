@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -157,10 +158,19 @@ public class SdltXmlHelper {
     public String createImportDocumentsMessage(SDLT sdlt) throws JAXBException {
         String responseXml = createSdltMessage(requestObjectFactory.createImportDocuments(), "ImportDocuments");
         String sdltXml = marshalRequestObject(sdlt, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
-        sdltXml = StringUtils.replace(sdltXml, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
-        responseXml = StringUtils.replace(responseXml, "<ns3:ImportDocuments/>", "<ns3:ImportDocuments>" + sdltXml + "</ns3:ImportDocuments>");
-        responseXml = StringUtils.replace(responseXml, "<ns2:ImportDocuments/>", "<ns2:ImportDocuments>" + sdltXml + "</ns2:ImportDocuments>");
-        responseXml = StringUtils.replace(responseXml, "<ImportDocuments/>", "<ImportDocuments>" + sdltXml + "</ImportDocuments>");
+        sdltXml = StringUtils.removeStartIgnoreCase(sdltXml, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+
+        responseXml = StringUtils.replace(responseXml, "ImportDocuments.xsd", "ImportXsdDocuments");
+        String before = StringUtils.substringBefore(responseXml, "ImportDocuments");
+        String namespace = StringUtils.substringAfterLast(before, "<");
+        String attributes = StringUtils.substringBefore(StringUtils.substringAfter(responseXml, "ImportDocuments"), ">");
+        String after = StringUtils.substringAfterLast(responseXml, "ImportDocuments");
+        responseXml = before + "ImportDocuments" + StringUtils.removeStart(StringUtils.trim(attributes), "/") + ">" + sdltXml + "</" + namespace + "ImportDocuments>" + StringUtils.removeStart(StringUtils.trim(after), "/>");
+        responseXml = StringUtils.replace(responseXml, "ImportXsdDocuments", "ImportDocuments.xsd");
+        //responseXml = responseXml.replaceAll("(?<=[:<]ImportDocuments>)[^<]*(?=</(\\w+:)?ImportDocuments>)", sdltXml);
+        //responseXml = StringUtils.replace(responseXml, "<ns3:ImportDocuments/>", "<ns3:ImportDocuments>" + sdltXml + "</ns3:ImportDocuments>");
+        //responseXml = StringUtils.replace(responseXml, "<ns2:ImportDocuments/>", "<ns2:ImportDocuments>" + sdltXml + "</ns2:ImportDocuments>");
+        //responseXml = StringUtils.replace(responseXml, "<ImportDocuments/>", "<ImportDocuments>" + sdltXml + "</ImportDocuments>");
         return responseXml;
     }
 
@@ -186,7 +196,7 @@ public class SdltXmlHelper {
                     } else if (value instanceof Integer) {
                         sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
                     } else if (value instanceof BigDecimal) {
-                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createStringType(xmlValue.value(), ((BigDecimal) value).toPlainString()));
+                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createStringType(xmlValue.value(), ((BigDecimal) value).setScale(0, RoundingMode.FLOOR).toPlainString()));
                     } else if (value instanceof LocalDate) {
                         sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createDateType(xmlValue.value(), (LocalDate) value));
                     } else if (value instanceof LocalDateTime) {
