@@ -160,6 +160,7 @@ public class SdltXmlHelper {
         String sdltXml = marshalRequestObject(sdlt, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
         sdltXml = StringUtils.removeStartIgnoreCase(sdltXml, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
 
+        //Need to manually put the SDLT node in the middle of the ImportDocuments node
         responseXml = StringUtils.replace(responseXml, "ImportDocuments.xsd", "ImportXsdDocuments");
         String before = StringUtils.substringBefore(responseXml, "ImportDocuments");
         String namespace = StringUtils.substringAfterLast(before, "<");

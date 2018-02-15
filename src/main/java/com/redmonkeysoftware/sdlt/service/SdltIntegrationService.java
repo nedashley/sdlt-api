@@ -95,7 +95,7 @@ public class SdltIntegrationService implements Closeable {
         if (requestObject instanceof SDLT) {
             requestString = SdltXmlHelper.getInstance().createImportDocumentsMessage((SDLT) requestObject);
         }
-        logger.log(Level.INFO, requestString);
+        logger.log(Level.FINEST, requestString);
         StringEntity entity = new StringEntity(requestString);
         post.addHeader("Authorization", "Bearer " + clientAuth.getAccessToken());
         post.setEntity(entity);

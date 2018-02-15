@@ -13,13 +13,13 @@ import org.apache.http.util.EntityUtils;
 public class AccessTokenJsonResponseHandler implements ResponseHandler<SdltAccessToken> {
 
     private final static Logger logger = Logger.getLogger(AccessTokenJsonResponseHandler.class.getName());
-    
+
     @Override
     public SdltAccessToken handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
         int status = response.getStatusLine().getStatusCode();
         if ((status >= 200) && (status < 300)) {
             String responseContent = EntityUtils.toString(response.getEntity());
-            //logger.log(Level.INFO, responseContent);
+            logger.log(Level.FINEST, responseContent);
             SdltAccessToken result = SdltJsonHelper.getInstance().getJson(responseContent, SdltAccessToken.class);
             return result;
         } else {
