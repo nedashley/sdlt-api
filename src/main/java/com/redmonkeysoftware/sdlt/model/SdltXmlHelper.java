@@ -8,6 +8,7 @@ import com.redmonkeysoftware.sdlt.model.request.GetAccountOTP;
 import com.redmonkeysoftware.sdlt.model.request.GetDocumentsStatus;
 import com.redmonkeysoftware.sdlt.model.request.GetDocumentsStatus.Filter;
 import com.redmonkeysoftware.sdlt.model.request.GetPrintoutDocuments;
+import com.redmonkeysoftware.sdlt.model.request.ImportDocuments;
 import com.redmonkeysoftware.sdlt.model.request.ObjectFactory;
 import com.redmonkeysoftware.sdlt.model.request.SDLT;
 import com.redmonkeysoftware.sdlt.model.request.SDLTMessage;
@@ -36,28 +37,24 @@ public class SdltXmlHelper {
 
     private final static Logger logger = Logger.getLogger(SdltXmlHelper.class.getName());
     private static SdltXmlHelper instance;
-    private final Marshaller requestMarshaller;
-    private final Unmarshaller requestUnmarshaller;
-    private final Marshaller responseMarshaller;
-    private final Unmarshaller responseUnmarshaller;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    private JAXBContext requestContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.request");
     private ObjectFactory requestObjectFactory = new com.redmonkeysoftware.sdlt.model.request.ObjectFactory();
+    private JAXBContext responseContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.response");
     private ObjectFactory responseObjectFactory = new com.redmonkeysoftware.sdlt.model.request.ObjectFactory();
 
     private SdltXmlHelper() throws JAXBException {
-        JAXBContext requestContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.request");
-        requestMarshaller = createMarshaller(requestContext);
-        requestUnmarshaller = createUnmarshaller(requestContext);
-        JAXBContext responseContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.response");
-        responseMarshaller = createMarshaller(responseContext);
-        responseUnmarshaller = createUnmarshaller(responseContext);
+
     }
 
-    private Marshaller createMarshaller(JAXBContext context) throws JAXBException {
+    private Marshaller createMarshaller(JAXBContext context, String schemaLocation) throws JAXBException {
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        if (StringUtils.isNotBlank(schemaLocation)) {
+            marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+        }
         return marshaller;
     }
 
@@ -144,13 +141,34 @@ public class SdltXmlHelper {
         }
         return request;
     }
-    
-    public SDLTMessage createMessage(Object requestObject) {
+
+    public String createSdltMessage(Object requestObject, String url) throws JAXBException {
         SDLTMessage message = requestObjectFactory.createSDLTMessage();
         SDLTMessage.Body body = requestObjectFactory.createSDLTMessageBody();
         body.getAny().add(requestObject);
         message.setBody(body);
-        return message;
+        message.setVersion("1.0");
+        SDLTMessage.Header header = requestObjectFactory.createSDLTMessageHeader();
+        message.setHeader(header);
+        String responseXml = marshalRequestObject(message, "http://sdlt.co.uk/Header https://online.sdlt.co.uk/schema/v1-0/SDLTMessage.xsd http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/" + url + ".xsd");
+        return responseXml;
+    }
+
+    public String createImportDocumentsMessage(SDLT sdlt) throws JAXBException {
+        String responseXml = createSdltMessage(requestObjectFactory.createImportDocuments(), "ImportDocuments");
+        String sdltXml = marshalRequestObject(sdlt, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
+        sdltXml = StringUtils.replace(sdltXml, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
+        responseXml = StringUtils.replace(responseXml, "<ns3:ImportDocuments/>", "<ns3:ImportDocuments>" + sdltXml + "</ns3:ImportDocuments>");
+        responseXml = StringUtils.replace(responseXml, "<ns2:ImportDocuments/>", "<ns2:ImportDocuments>" + sdltXml + "</ns2:ImportDocuments>");
+        responseXml = StringUtils.replace(responseXml, "<ImportDocuments/>", "<ImportDocuments>" + sdltXml + "</ImportDocuments>");
+        return responseXml;
+    }
+
+    public String marshalRequestObject(Object requestObject, String schemaLocation) throws JAXBException {
+        Marshaller marshaller = createMarshaller(requestContext, schemaLocation);
+        StringWriter swriter = new StringWriter();
+        marshaller.marshal(requestObject, swriter);
+        return swriter.toString();
     }
 
     public SDLT convertToSDLT(SdltImportRequest request) {
@@ -186,35 +204,18 @@ public class SdltXmlHelper {
         return sdlt;
     }
 
-    public String marshalRequestObject(Object object) throws JAXBException {
-        if (!StringUtils.equals(object.getClass().getPackage().getName(), "com.redmonkeysoftware.sdlt.model.request")) {
-            throw new SdltException("Invalid class for marshalling");
-        }
-        StringWriter swriter = new StringWriter();
-        requestMarshaller.marshal(object, swriter);
-        return swriter.toString();
-    }
-
-    public String marshalResponseObject(Object object) throws JAXBException {
-        if (!StringUtils.equals(object.getClass().getPackage().getName(), "com.redmonkeysoftware.sdlt.model.response")) {
-            throw new SdltException("Invalid class for marshalling");
-        }
-        StringWriter swriter = new StringWriter();
-        responseMarshaller.marshal(object, swriter);
-        return swriter.toString();
-    }
-
-    public <T extends Object> T unmarshalRequestXml(InputStream xml, Class<T> type) throws JAXBException {
-        Object unmarshalled = requestUnmarshaller.unmarshal(xml);
-        try {
-            return (T) unmarshalled;
-        } catch (Throwable te) {
-            logger.log(Level.SEVERE, "Unmarshalled class from xml is not of the correct type", te);
-        }
-        return null;
+    public String generateTestSdlt() throws JAXBException {
+        ImportDocuments importDocuments = requestObjectFactory.createImportDocuments();
+        SDLT sdlt = requestObjectFactory.createSDLT();
+        StringType id = requestObjectFactory.createStringType();
+        id.setValue("test");
+        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(requestObjectFactory.createSDLTFID(id));
+        importDocuments.getAny().add(sdlt);
+        return createImportDocumentsMessage(sdlt);
     }
 
     public <T extends Object> T unmarshalResponseXml(InputStream xml, Class<T> type) throws JAXBException {
+        Unmarshaller responseUnmarshaller = createUnmarshaller(responseContext);
         Object unmarshalled = responseUnmarshaller.unmarshal(xml);
         try {
             return (T) unmarshalled;

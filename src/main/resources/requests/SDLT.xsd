@@ -22,7 +22,7 @@
                     <xs:element type="sdlt:DateTimeType" name="F_SubmissionDate"/>
                     <xs:element type="sdlt:DateTimeType" name="F_ReturnDate"/>
                     <xs:element type="sdlt:StringType" name="F_SDLTID"/>
-                </xs:choice>	
+                </xs:choice>
                 <xs:element type="sdlt:StringType" name="SDLT_PropertyTypeCode"/>
                 <xs:element type="sdlt:StringType" name="SDLT_TransactionDescriptionCode"/>
                 <xs:element type="sdlt:StringType" name="SDLT_InterestCreatedCode"/>

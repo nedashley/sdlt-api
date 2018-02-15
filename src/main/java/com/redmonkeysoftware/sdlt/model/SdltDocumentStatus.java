@@ -47,6 +47,10 @@ public class SdltDocumentStatus implements Serializable {
         return hash;
     }
 
+    public boolean isAccepted() {
+        return Objects.equals(SdltDocumentStatusType.ACCEPTED, status);
+    }
+
     public boolean hasError() {
         return (StringUtils.isNotBlank(error));
     }

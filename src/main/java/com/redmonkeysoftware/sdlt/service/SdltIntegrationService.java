@@ -6,13 +6,13 @@ import com.redmonkeysoftware.sdlt.model.SdltDocumentStatus;
 import com.redmonkeysoftware.sdlt.model.SdltImportRequest;
 import com.redmonkeysoftware.sdlt.model.SdltXmlHelper;
 import com.redmonkeysoftware.sdlt.model.exceptions.SdltException;
-import com.redmonkeysoftware.sdlt.model.request.SDLTMessage;
 import com.redmonkeysoftware.sdlt.model.response.GetAccountOTP;
 import com.redmonkeysoftware.sdlt.model.response.GetDocumentsStatus;
 import com.redmonkeysoftware.sdlt.model.response.GetPrintoutDocuments;
 import com.redmonkeysoftware.sdlt.model.response.ImportDocuments;
 import com.redmonkeysoftware.sdlt.model.response.Test;
 import com.redmonkeysoftware.sdlt.model.SdltAccessToken;
+import com.redmonkeysoftware.sdlt.model.request.SDLT;
 import com.redmonkeysoftware.sdlt.service.handler.AccessTokenJsonResponseHandler;
 import com.redmonkeysoftware.sdlt.service.handler.SDLTResponseHandler;
 import java.io.Closeable;
@@ -91,8 +91,10 @@ public class SdltIntegrationService implements Closeable {
     protected <T> T processSdltCall(String clientId, String clientSecret, String url, Object requestObject, Class<T> type) throws IOException, IllegalStateException, JAXBException {
         SdltAccessToken clientAuth = authenticateClient(clientId, clientSecret);
         HttpPost post = new HttpPost(endpoint + url);
-        SDLTMessage message = SdltXmlHelper.getInstance().createMessage(requestObject);
-        String requestString = SdltXmlHelper.getInstance().marshalRequestObject(message);
+        String requestString = SdltXmlHelper.getInstance().createSdltMessage(requestObject, url);
+        if (requestObject instanceof SDLT) {
+            requestString = SdltXmlHelper.getInstance().createImportDocumentsMessage((SDLT) requestObject);
+        }
         logger.log(Level.INFO, requestString);
         StringEntity entity = new StringEntity(requestString);
         post.addHeader("Authorization", "Bearer " + clientAuth.getAccessToken());
