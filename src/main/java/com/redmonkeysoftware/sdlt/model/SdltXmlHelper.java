@@ -1,6 +1,5 @@
 package com.redmonkeysoftware.sdlt.model;
 
-import com.redmonkeysoftware.sdlt.model.exceptions.SdltException;
 import com.redmonkeysoftware.sdlt.model.request.BooleanType;
 import com.redmonkeysoftware.sdlt.model.request.DateTimeType;
 import com.redmonkeysoftware.sdlt.model.request.DateType;
@@ -120,15 +119,18 @@ public class SdltXmlHelper {
         return request;
     }
 
-    public GetDocumentsStatus convertToGetDocumentsStatus(LocalDate from, LocalDate to) {
+    public GetDocumentsStatus convertToGetDocumentsStatus(String documentId) {
         GetDocumentsStatus status = requestObjectFactory.createGetDocumentsStatus();
         Filter filter = requestObjectFactory.createGetDocumentsStatusFilter();
-        if (from != null) {
-            filter.getCreateDateFromOrCreateDateTo().add(createXmlGregorianCalendarType("CreateDateFrom", from));
+        if (StringUtils.isNotBlank(documentId)) {
+            filter.getCreateDateFromOrCreateDateToOrDocumentID().add(requestObjectFactory.createGetDocumentsStatusFilterDocumentID(documentId));
         }
-        if (to != null) {
-            filter.getCreateDateFromOrCreateDateTo().add(createXmlGregorianCalendarType("CreateDateTo", to));
-        }
+//        if (from != null) {
+//            filter.getCreateDateFromOrCreateDateTo().add(createXmlGregorianCalendarType("CreateDateFrom", from));
+//        }
+//        if (to != null) {
+//            filter.getCreateDateFromOrCreateDateTo().add(createXmlGregorianCalendarType("CreateDateTo", to));
+//        }
         status.setFilter(filter);
         return status;
     }

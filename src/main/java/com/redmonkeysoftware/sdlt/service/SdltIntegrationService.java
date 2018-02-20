@@ -123,9 +123,9 @@ public class SdltIntegrationService implements Closeable {
         }
     }
 
-    public List<SdltDocumentStatus> getDocumentsStatus(String clientId, String clientSecret, LocalDate from, LocalDate to) {
+    public List<SdltDocumentStatus> getDocumentsStatus(String clientId, String clientSecret, String documentId) {
         try {
-            GetDocumentsStatus result = processSdltCall(clientId, clientSecret, "GetDocumentsStatus", SdltXmlHelper.getInstance().convertToGetDocumentsStatus(from, to), GetDocumentsStatus.class);
+            GetDocumentsStatus result = processSdltCall(clientId, clientSecret, "GetDocumentsStatus", SdltXmlHelper.getInstance().convertToGetDocumentsStatus(documentId), GetDocumentsStatus.class);
             List<SdltDocumentStatus> results = new ArrayList<>();
             for (GetDocumentsStatus.Document doc : result.getDocument()) {
                 results.add(new SdltDocumentStatus().withDocumentStatus(doc));

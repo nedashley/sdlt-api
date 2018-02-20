@@ -8,6 +8,7 @@
                         <xs:choice maxOccurs="unbounded">
                             <xs:element type="xs:date" name="CreateDateFrom" minOccurs="0"/>
                             <xs:element type="xs:date" name="CreateDateTo" minOccurs="0"/>
+                            <xs:element type="xs:string" name="DocumentID" minOccurs="0"/>
                         </xs:choice>
                     </xs:complexType>
                 </xs:element>
