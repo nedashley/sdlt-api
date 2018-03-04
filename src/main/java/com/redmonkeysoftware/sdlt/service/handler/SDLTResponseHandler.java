@@ -16,24 +16,22 @@ import org.apache.http.util.EntityUtils;
 
 public class SDLTResponseHandler<T> implements ResponseHandler<T> {
 
-    private final static Logger logger = Logger.getLogger(SDLTResponseHandler.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SDLTResponseHandler.class.getName());
 
     @Override
-    public T handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+    public T handleResponse(HttpResponse response) throws IOException {
         int status = response.getStatusLine().getStatusCode();
         if ((status >= 200) && (status < 300)) {
             try {
                 ContentType contentType = ContentType.getOrDefault(response.getEntity());
-                //String mimeType = contentType.getMimeType();
                 Charset charset = contentType.getCharset();
                 String responseContent = EntityUtils.toString(response.getEntity(), charset);
-                logger.log(Level.FINEST, "Received: " + responseContent);
+                LOGGER.log(Level.FINEST, "Received: {0}", responseContent);
                 SDLTResponse sdltResponse = SdltXmlHelper.getInstance().unmarshalResponseXml(IOUtils.toInputStream(responseContent, charset), SDLTResponse.class);
                 for (Object obj : sdltResponse.getBody().getAny()) {
-                    logger.log(Level.FINE, "Received: " + obj.getClass().getName());
+                    LOGGER.log(Level.FINE, "Received: {0}", obj.getClass().getName());
                     try {
-                        T t = (T) obj;
-                        return t;
+                        return (T) obj;
                     } catch (Throwable t) {
                         //Ignore as may not be convertable into required type
                     }
