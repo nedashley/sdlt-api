@@ -87,7 +87,7 @@ public class SdltImportRequest implements Serializable {
     @SdltXmlValue("SDLT_TotalTaxPaid")
     protected BigDecimal totalTaxPaid;
     @SdltXmlValue("SDLT_TotalTaxPaidIncPenaltyYesNo")
-    protected BigDecimal totalTaxPaidIncPenalty;
+    protected Boolean totalTaxPaidIncPenalty;
     @SdltXmlValue("SDLT_LeaseTypeCode")
     protected String leaseTypeCode;
     @SdltXmlValue("SDLT_LeaseStartDate")
@@ -602,11 +602,11 @@ public class SdltImportRequest implements Serializable {
         this.totalTaxPaid = totalTaxPaid;
     }
 
-    public BigDecimal getTotalTaxPaidIncPenalty() {
+    public Boolean getTotalTaxPaidIncPenalty() {
         return totalTaxPaidIncPenalty;
     }
 
-    public void setTotalTaxPaidIncPenalty(BigDecimal totalTaxPaidIncPenalty) {
+    public void setTotalTaxPaidIncPenalty(Boolean totalTaxPaidIncPenalty) {
         this.totalTaxPaidIncPenalty = totalTaxPaidIncPenalty;
     }
 
