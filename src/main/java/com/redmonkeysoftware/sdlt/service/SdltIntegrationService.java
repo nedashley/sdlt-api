@@ -12,12 +12,11 @@ import com.redmonkeysoftware.sdlt.model.response.GetPrintoutDocuments;
 import com.redmonkeysoftware.sdlt.model.response.ImportDocuments;
 import com.redmonkeysoftware.sdlt.model.response.Test;
 import com.redmonkeysoftware.sdlt.model.SdltAccessToken;
-import com.redmonkeysoftware.sdlt.model.request.SDLT;
+import com.redmonkeysoftware.sdlt.model.request.sdlt.SDLT;
 import com.redmonkeysoftware.sdlt.service.handler.AccessTokenJsonResponseHandler;
 import com.redmonkeysoftware.sdlt.service.handler.SDLTResponseHandler;
 import java.io.Closeable;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -40,7 +39,7 @@ public class SdltIntegrationService implements Closeable {
     private final String applicationSecret;
     private final static String endpoint = "https://online.sdlt.co.uk/api/";
     private CloseableHttpClient client = null;
-    private SdltAccessToken applicationAccessToken;
+    //private SdltAccessToken applicationAccessToken;
 
     public SdltIntegrationService(final String applicationId, final String applicationSecret) {
         this.applicationId = applicationId;
@@ -57,15 +56,17 @@ public class SdltIntegrationService implements Closeable {
         HttpClientUtils.closeQuietly(client);
     }
 
-    protected SdltAccessToken authenticateApplication() {
-        return processAuthenticationCall(applicationId, applicationSecret, null);
+    protected SdltAccessToken authenticateApplication(String clientId, String clientSecret) {
+        SdltAccessToken applicationAuth = processAuthenticationCall(applicationId, applicationSecret, null);
+        SdltAccessToken clientAuth = processAuthenticationCall(clientId, clientSecret, applicationAuth.getAccessToken());
+        return clientAuth;
     }
 
-    protected SdltAccessToken authenticateClient(String clientId, String clientSecret) {
-        if ((applicationAccessToken == null) || (applicationAccessToken.isExpired())) {
-            applicationAccessToken = authenticateApplication();
+    public SdltAccessToken authenticateClient(SdltAccessToken token, String clientId, String clientSecret) {
+        if ((token == null) || (token.isExpired())) {
+            return authenticateApplication(clientId, clientSecret);
         }
-        return processAuthenticationCall(clientId, clientSecret, applicationAccessToken.getAccessToken());
+        return processAuthenticationCall(clientId, clientSecret, token.getAccessToken());
     }
 
     protected SdltAccessToken processAuthenticationCall(String id, String secret, String headerToken) {
@@ -87,25 +88,22 @@ public class SdltIntegrationService implements Closeable {
             throw new SdltException("Error authenticating with SDLT - client authentication");
         }
     }
-
-    protected <T> T processSdltCall(String clientId, String clientSecret, String url, Object requestObject, Class<T> type) throws IOException, IllegalStateException, JAXBException {
-        SdltAccessToken clientAuth = authenticateClient(clientId, clientSecret);
+   
+    
+    protected <T> T processSdltCall(SdltAccessToken token, String clientId, String clientSecret, String url, Object apiRequest, Class<T> type) throws IOException, IllegalStateException, JAXBException {
+        //SdltAccessToken clientAuth = authenticateClient(clientId, clientSecret);
         HttpPost post = new HttpPost(endpoint + url);
-        String requestString = SdltXmlHelper.getInstance().createSdltMessage(requestObject, url);
-        if (requestObject instanceof SDLT) {
-            requestString = SdltXmlHelper.getInstance().createImportDocumentsMessage((SDLT) requestObject);
-        }
-        logger.log(Level.FINEST, requestString);
-        StringEntity entity = new StringEntity(requestString);
-        post.addHeader("Authorization", "Bearer " + clientAuth.getAccessToken());
+        StringEntity entity = new StringEntity(SdltXmlHelper.getInstance().generateRequestXml(url, apiRequest));
+        post.addHeader("Authorization", "Bearer " + token.getAccessToken());
         post.setEntity(entity);
-        T result = client.execute(post, new SDLTResponseHandler<T>());
+        T result = client.execute(post, new SDLTResponseHandler<>());
         return result;
     }
 
-    public String test(String clientId, String clientSecret, String testValue) {
+    public String test(SdltAccessToken token, String clientId, String clientSecret, String testValue) {
         try {
-            Test result = processSdltCall(clientId, clientSecret, "Test", SdltXmlHelper.getInstance().convertToTest(testValue), Test.class);
+            Test result = processSdltCall(token, clientId, clientSecret, "Test",
+                    SdltXmlHelper.getInstance().convertToTest(testValue), Test.class);
             return result != null ? result.getData() : null;
         } catch (IOException | IllegalStateException | JAXBException e) {
             logger.log(Level.SEVERE, "Error calling Test method", e);
@@ -113,9 +111,9 @@ public class SdltIntegrationService implements Closeable {
         }
     }
 
-    public SdltAccountOtp getAccountOtp(String clientId, String clientSecret, Integer documentId) {
+    public SdltAccountOtp getAccountOtp(SdltAccessToken token, String clientId, String clientSecret, Integer documentId) {
         try {
-            GetAccountOTP result = processSdltCall(clientId, clientSecret, "GetAccountOTP", SdltXmlHelper.getInstance().convertToGetAccountOTP(documentId), GetAccountOTP.class);
+            GetAccountOTP result = processSdltCall(token, clientId, clientSecret, "GetAccountOTP", SdltXmlHelper.getInstance().convertToGetAccountOTP(documentId), GetAccountOTP.class);
             return new SdltAccountOtp().withGetAccountOTP(result);
         } catch (IOException | IllegalStateException | JAXBException e) {
             logger.log(Level.SEVERE, "Error getting account OTP", e);
@@ -123,9 +121,9 @@ public class SdltIntegrationService implements Closeable {
         }
     }
 
-    public List<SdltDocumentStatus> getDocumentsStatus(String clientId, String clientSecret, String documentId) {
+    public List<SdltDocumentStatus> getDocumentsStatus(SdltAccessToken token, String clientId, String clientSecret, String documentId) {
         try {
-            GetDocumentsStatus result = processSdltCall(clientId, clientSecret, "GetDocumentsStatus", SdltXmlHelper.getInstance().convertToGetDocumentsStatus(documentId), GetDocumentsStatus.class);
+            GetDocumentsStatus result = processSdltCall(token, clientId, clientSecret, "GetDocumentsStatus", SdltXmlHelper.getInstance().convertToGetDocumentsStatus(documentId), GetDocumentsStatus.class);
             List<SdltDocumentStatus> results = new ArrayList<>();
             for (GetDocumentsStatus.Document doc : result.getDocument()) {
                 results.add(new SdltDocumentStatus().withDocumentStatus(doc));
@@ -137,9 +135,9 @@ public class SdltIntegrationService implements Closeable {
         }
     }
 
-    public List<SdltDocument> getPrintoutDocuments(String clientId, String clientSecret, String documentId) {
+    public List<SdltDocument> getPrintoutDocuments(SdltAccessToken token, String clientId, String clientSecret, String documentId) {
         try {
-            GetPrintoutDocuments result = processSdltCall(clientId, clientSecret, "GetPrintoutDocuments", SdltXmlHelper.getInstance().convertToPrintoutDocuments(documentId), GetPrintoutDocuments.class);
+            GetPrintoutDocuments result = processSdltCall(token, clientId, clientSecret, "GetPrintoutDocuments", SdltXmlHelper.getInstance().convertToPrintoutDocuments(documentId), GetPrintoutDocuments.class);
             List<SdltDocument> results = new ArrayList<>();
             for (GetPrintoutDocuments.Document gpoDoc : result.getDocument()) {
                 for (GetPrintoutDocuments.Document.PrintoutDocument gpoDocDoc : gpoDoc.getPrintoutDocument()) {
@@ -153,9 +151,9 @@ public class SdltIntegrationService implements Closeable {
         }
     }
 
-    public List<SdltDocumentStatus> importDocuments(String clientId, String clientSecret, SdltImportRequest request) {
+    public List<SdltDocumentStatus> importDocuments(SdltAccessToken token, String clientId, String clientSecret, SdltImportRequest request) {
         try {
-            ImportDocuments result = processSdltCall(clientId, clientSecret, "ImportDocuments", SdltXmlHelper.getInstance().convertToSDLT(request), ImportDocuments.class);
+            ImportDocuments result = processSdltCall(token, clientId, clientSecret, "ImportDocuments", SdltXmlHelper.getInstance().convertToSDLT(request), ImportDocuments.class);
             List<SdltDocumentStatus> results = new ArrayList<>();
             for (ImportDocuments.Document doc : result.getDocument()) {
                 results.add(new SdltDocumentStatus().withDocumentImport(doc));
