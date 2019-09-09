@@ -26,10 +26,10 @@ public class SDLTResponseHandler<T> implements ResponseHandler<T> {
                 ContentType contentType = ContentType.getOrDefault(response.getEntity());
                 Charset charset = contentType.getCharset();
                 String responseContent = EntityUtils.toString(response.getEntity(), charset);
-                LOGGER.log(Level.FINEST, "Received: {0}", responseContent);
+                LOGGER.log(Level.INFO, "Received: {0}", responseContent);
                 SDLTResponse sdltResponse = SdltXmlHelper.getInstance().unmarshalResponseXml(IOUtils.toInputStream(responseContent, charset), SDLTResponse.class);
                 for (Object obj : sdltResponse.getBody().getAny()) {
-                    LOGGER.log(Level.FINE, "Received: {0}", obj.getClass().getName());
+                    LOGGER.log(Level.INFO, "Received: {0}", obj.getClass().getName());
                     try {
                         return (T) obj;
                     } catch (Throwable t) {

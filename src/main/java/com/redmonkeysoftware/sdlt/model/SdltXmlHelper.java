@@ -1,18 +1,17 @@
 package com.redmonkeysoftware.sdlt.model;
 
-import com.redmonkeysoftware.sdlt.model.request.BooleanType;
-import com.redmonkeysoftware.sdlt.model.request.DateTimeType;
-import com.redmonkeysoftware.sdlt.model.request.DateType;
-import com.redmonkeysoftware.sdlt.model.request.GetAccountOTP;
-import com.redmonkeysoftware.sdlt.model.request.GetDocumentsStatus;
-import com.redmonkeysoftware.sdlt.model.request.GetDocumentsStatus.Filter;
-import com.redmonkeysoftware.sdlt.model.request.GetPrintoutDocuments;
-import com.redmonkeysoftware.sdlt.model.request.ImportDocuments;
-import com.redmonkeysoftware.sdlt.model.request.ObjectFactory;
-import com.redmonkeysoftware.sdlt.model.request.SDLT;
-import com.redmonkeysoftware.sdlt.model.request.SDLTMessage;
-import com.redmonkeysoftware.sdlt.model.request.StringType;
-import com.redmonkeysoftware.sdlt.model.request.Test;
+import com.redmonkeysoftware.sdlt.model.request.api.GetAccountOTP;
+import com.redmonkeysoftware.sdlt.model.request.api.GetDocumentsStatus;
+import com.redmonkeysoftware.sdlt.model.request.api.GetDocumentsStatus.Filter;
+import com.redmonkeysoftware.sdlt.model.request.api.GetPrintoutDocuments;
+import com.redmonkeysoftware.sdlt.model.request.api.ImportDocuments;
+import com.redmonkeysoftware.sdlt.model.request.api.Test;
+import com.redmonkeysoftware.sdlt.model.request.sdlt.BooleanType;
+import com.redmonkeysoftware.sdlt.model.request.sdlt.DateTimeType;
+import com.redmonkeysoftware.sdlt.model.request.sdlt.DateType;
+import com.redmonkeysoftware.sdlt.model.request.sdlt.SDLT;
+import com.redmonkeysoftware.sdlt.model.request.sdlt.StringType;
+import com.redmonkeysoftware.sdlt.model.request.sdltmessage.SDLTMessage;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -39,10 +38,16 @@ public class SdltXmlHelper {
     private static SdltXmlHelper instance;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    private JAXBContext requestContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.request");
-    private ObjectFactory requestObjectFactory = new com.redmonkeysoftware.sdlt.model.request.ObjectFactory();
+    private JAXBContext sdltRequestContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.request.sdlt");
+    private JAXBContext sdltMessageRequestContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.request.sdltmessage");
+    private JAXBContext apiRequestContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.request.api");
+    
+    private com.redmonkeysoftware.sdlt.model.request.sdlt.ObjectFactory sdltObjectFactory = new com.redmonkeysoftware.sdlt.model.request.sdlt.ObjectFactory();
+    private com.redmonkeysoftware.sdlt.model.request.sdltmessage.ObjectFactory sdltMessageObjectFactory = new com.redmonkeysoftware.sdlt.model.request.sdltmessage.ObjectFactory();
+    private com.redmonkeysoftware.sdlt.model.request.api.ObjectFactory apiObjectFactory = new com.redmonkeysoftware.sdlt.model.request.api.ObjectFactory();
+    
     private JAXBContext responseContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.response");
-    private ObjectFactory responseObjectFactory = new com.redmonkeysoftware.sdlt.model.request.ObjectFactory();
+    private com.redmonkeysoftware.sdlt.model.response.ObjectFactory responseObjectFactory = new com.redmonkeysoftware.sdlt.model.response.ObjectFactory();
 
     private SdltXmlHelper() throws JAXBException {
 
@@ -106,13 +111,13 @@ public class SdltXmlHelper {
     }
 
     public Test convertToTest(String testValue) {
-        Test request = requestObjectFactory.createTest();
+        Test request = apiObjectFactory.createTest();
         request.setData(testValue);
         return request;
     }
 
     public GetAccountOTP convertToGetAccountOTP(Integer documentId) {
-        GetAccountOTP request = requestObjectFactory.createGetAccountOTP();
+        GetAccountOTP request = apiObjectFactory.createGetAccountOTP();
         if (documentId != null) {
             request.setDocumentID(documentId);
         }
@@ -120,10 +125,10 @@ public class SdltXmlHelper {
     }
 
     public GetDocumentsStatus convertToGetDocumentsStatus(String documentId) {
-        GetDocumentsStatus status = requestObjectFactory.createGetDocumentsStatus();
-        Filter filter = requestObjectFactory.createGetDocumentsStatusFilter();
+        GetDocumentsStatus status = apiObjectFactory.createGetDocumentsStatus();
+        Filter filter = apiObjectFactory.createGetDocumentsStatusFilter();
         if (StringUtils.isNotBlank(documentId)) {
-            filter.getCreateDateFromOrCreateDateToOrDocumentID().add(requestObjectFactory.createGetDocumentsStatusFilterDocumentID(documentId));
+            filter.getCreateDateFromOrCreateDateToOrDocumentID().add(apiObjectFactory.createGetDocumentsStatusFilterDocumentID(documentId));
         }
 //        if (from != null) {
 //            filter.getCreateDateFromOrCreateDateTo().add(createXmlGregorianCalendarType("CreateDateFrom", from));
@@ -136,56 +141,103 @@ public class SdltXmlHelper {
     }
 
     public GetPrintoutDocuments convertToPrintoutDocuments(String documentId) {
-        GetPrintoutDocuments request = requestObjectFactory.createGetPrintoutDocuments();
+        GetPrintoutDocuments request = apiObjectFactory.createGetPrintoutDocuments();
         if (StringUtils.isNotBlank(documentId)) {
-            GetPrintoutDocuments.Document document = requestObjectFactory.createGetPrintoutDocumentsDocument();
+            GetPrintoutDocuments.Document document = apiObjectFactory.createGetPrintoutDocumentsDocument();
             document.setDocumentID(documentId);
             request.getDocument().add(document);
         }
         return request;
     }
 
-    public String createSdltMessage(Object requestObject, String url) throws JAXBException {
-        SDLTMessage message = requestObjectFactory.createSDLTMessage();
-        SDLTMessage.Body body = requestObjectFactory.createSDLTMessageBody();
-        body.getAny().add(requestObject);
-        message.setBody(body);
-        message.setVersion("1.0");
-        SDLTMessage.Header header = requestObjectFactory.createSDLTMessageHeader();
-        message.setHeader(header);
-        String responseXml = marshalRequestObject(message, "http://sdlt.co.uk/Header https://online.sdlt.co.uk/schema/v1-0/SDLTMessage.xsd http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/" + url + ".xsd");
+    protected String createApiXml(Object requestObject, String url) throws JAXBException {
+        String responseXml = marshalApiRequestObject(requestObject, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/" + url + ".xsd");
         return responseXml;
     }
-
-    public String createImportDocumentsMessage(SDLT sdlt) throws JAXBException {
-        String responseXml = createSdltMessage(requestObjectFactory.createImportDocuments(), "ImportDocuments");
-        String sdltXml = marshalRequestObject(sdlt, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
-        sdltXml = StringUtils.removeStartIgnoreCase(sdltXml, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-
-        //Need to manually put the SDLT node in the middle of the ImportDocuments node
-        responseXml = StringUtils.replace(responseXml, "ImportDocuments.xsd", "ImportXsdDocuments");
-        String before = StringUtils.substringBefore(responseXml, "ImportDocuments");
-        String namespace = StringUtils.substringAfterLast(before, "<");
-        String attributes = StringUtils.substringBefore(StringUtils.substringAfter(responseXml, "ImportDocuments"), ">");
-        String after = StringUtils.substringAfterLast(responseXml, "ImportDocuments");
-        responseXml = before + "ImportDocuments" + StringUtils.removeStart(StringUtils.trim(attributes), "/") + ">" + sdltXml + "</" + namespace + "ImportDocuments>" + StringUtils.removeStart(StringUtils.trim(after), "/>");
-        responseXml = StringUtils.replace(responseXml, "ImportXsdDocuments", "ImportDocuments.xsd");
-        //responseXml = responseXml.replaceAll("(?<=[:<]ImportDocuments>)[^<]*(?=</(\\w+:)?ImportDocuments>)", sdltXml);
-        //responseXml = StringUtils.replace(responseXml, "<ns3:ImportDocuments/>", "<ns3:ImportDocuments>" + sdltXml + "</ns3:ImportDocuments>");
-        //responseXml = StringUtils.replace(responseXml, "<ns2:ImportDocuments/>", "<ns2:ImportDocuments>" + sdltXml + "</ns2:ImportDocuments>");
-        //responseXml = StringUtils.replace(responseXml, "<ImportDocuments/>", "<ImportDocuments>" + sdltXml + "</ImportDocuments>");
+    
+    protected String createSdltXml(Object requestObject) throws JAXBException {
+        String responseXml = marshalSdltRequestObject(requestObject, "http://sdlt.co.uk/SDLT https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
         return responseXml;
     }
+    
+//    protected String createSdltMessage(Object requestObject, String url) throws JAXBException {
+//        SDLTMessage message = sdltMessageObjectFactory.createSDLTMessage();
+//        SDLTMessage.Body body = sdltMessageObjectFactory.createSDLTMessageBody();
+//        body.getAny().add(requestObject);
+//        message.setBody(body);
+//        message.setVersion("1.0");
+//        SDLTMessage.Header header = sdltMessageObjectFactory.createSDLTMessageHeader();
+//        message.setHeader(header);
+//        String responseXml = marshalSdltMessageRequestObject(message, "http://sdlt.co.uk/Header https://online.sdlt.co.uk/schema/v1-0/SDLTMessage.xsd http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/" + url + ".xsd");
+//        return responseXml;
+//    }
 
-    public String marshalRequestObject(Object requestObject, String schemaLocation) throws JAXBException {
-        Marshaller marshaller = createMarshaller(requestContext, schemaLocation);
+//    protected String createImportDocumentsMessage(SDLT sdlt) throws JAXBException {
+//        String responseXml = createApiXml(apiObjectFactory.createImportDocuments(), "ImportDocuments");
+//        String sdltXml = marshalSdltRequestObject(sdlt, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
+//        sdltXml = StringUtils.removeStartIgnoreCase(sdltXml, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+//
+//        //Need to manually put the SDLT node in the middle of the ImportDocuments node
+//        responseXml = StringUtils.replace(responseXml, "ImportDocuments.xsd", "ImportXsdDocuments");
+//        String before = StringUtils.substringBefore(responseXml, "ImportDocuments");
+//        String namespace = StringUtils.substringAfterLast(before, "<");
+//        String attributes = StringUtils.substringBefore(StringUtils.substringAfter(responseXml, "ImportDocuments"), ">");
+//        String after = StringUtils.substringAfterLast(responseXml, "ImportDocuments");
+//        responseXml = before + "ImportDocuments" + StringUtils.removeStart(StringUtils.trim(attributes), "/") + ">" + sdltXml + "</" + namespace + "ImportDocuments>" + StringUtils.removeStart(StringUtils.trim(after), "/>");
+//        responseXml = StringUtils.replace(responseXml, "ImportXsdDocuments", "ImportDocuments.xsd");
+//        //responseXml = responseXml.replaceAll("(?<=[:<]ImportDocuments>)[^<]*(?=</(\\w+:)?ImportDocuments>)", sdltXml);
+//        //responseXml = StringUtils.replace(responseXml, "<ns3:ImportDocuments/>", "<ns3:ImportDocuments>" + sdltXml + "</ns3:ImportDocuments>");
+//        //responseXml = StringUtils.replace(responseXml, "<ns2:ImportDocuments/>", "<ns2:ImportDocuments>" + sdltXml + "</ns2:ImportDocuments>");
+//        //responseXml = StringUtils.replace(responseXml, "<ImportDocuments/>", "<ImportDocuments>" + sdltXml + "</ImportDocuments>");
+//        return responseXml;
+//    }
+
+    protected String marshalApiRequestObject(Object requestObject, String schemaLocation) throws JAXBException {
+        Marshaller marshaller = createMarshaller(apiRequestContext, schemaLocation);
+        StringWriter swriter = new StringWriter();
+        marshaller.marshal(requestObject, swriter);
+        return swriter.toString();
+    }
+    protected String marshalSdltRequestObject(Object requestObject, String schemaLocation) throws JAXBException {
+        Marshaller marshaller = createMarshaller(sdltRequestContext, schemaLocation);
+        StringWriter swriter = new StringWriter();
+        marshaller.marshal(requestObject, swriter);
+        return swriter.toString();
+    }
+    protected String marshalSdltMessageRequestObject(Object requestObject, String schemaLocation) throws JAXBException {
+        Marshaller marshaller = createMarshaller(sdltMessageRequestContext, schemaLocation);
         StringWriter swriter = new StringWriter();
         marshaller.marshal(requestObject, swriter);
         return swriter.toString();
     }
 
+     public String generateRequestXml(String url, Object apiRequest) throws JAXBException {
+        String apiRequestXml = null;
+        if (apiRequest instanceof SDLT) {
+            String sdltXml = createSdltXml(apiRequest);
+            sdltXml = StringUtils.removeStartIgnoreCase(sdltXml, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+            apiRequestXml = "<ImportDocuments xmlns=\"http://sdlt.co.uk/API\" xsi:schemaLocation=\"http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/ImportDocuments.xsd\">\n"
+                    + sdltXml
+                    + "\n</ImportDocuments>";
+        } else {
+            apiRequestXml = createApiXml(apiRequest, url);
+        }
+        String xml = StringUtils.removeStartIgnoreCase(apiRequestXml, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<SDLTMessage xmlns=\"http://sdlt.co.uk/Header\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://sdlt.co.uk/Header https://online.sdlt.co.uk/schema/v1-0/SDLTMessage.xsd\">\n"
+                + "   <Version>1.0</Version>\n"
+                + "   <Header />\n"
+                + "   <Body>\n"
+                + xml
+                + "\n    </Body>\n"
+                + "</SDLTMessage>";
+//        String requestString = SdltXmlHelper.getInstance().createSdltMessage(requestObject, url);
+        logger.log(Level.INFO, String.format("Sending request: %s", xml));
+        return xml;
+    }
+    
     public SDLT convertToSDLT(SdltImportRequest request) {
-        SDLT sdlt = requestObjectFactory.createSDLT();
+        SDLT sdlt = sdltObjectFactory.createSDLT();
         try {
             for (Field field : request.getClass().getDeclaredFields()) {
                 if (field.isAnnotationPresent(SdltXmlValue.class)) {
@@ -217,14 +269,31 @@ public class SdltXmlHelper {
         return sdlt;
     }
 
-    public String generateTestSdlt() throws JAXBException {
-        ImportDocuments importDocuments = requestObjectFactory.createImportDocuments();
-        SDLT sdlt = requestObjectFactory.createSDLT();
-        StringType id = requestObjectFactory.createStringType();
+    public SDLT generateTestSdlt() throws JAXBException {
+//        SDLT sdlt2 = sdltObjectFactory.createSDLT();
+//        String sdltXml = marshalSdltRequestObject(sdlt2, "http://sdlt.co.uk/SDLT https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
+//        
+//        System.out.println(sdltXml);
+//        ImportDocuments id2 = apiObjectFactory.createImportDocuments();
+//        String idXml = marshalApiRequestObject(id2, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/ImportDocuments.xsd");
+//        System.out.println(idXml);
+//        SDLTMessage message = sdltMessageObjectFactory.createSDLTMessage();
+//        SDLTMessage.Body body = sdltMessageObjectFactory.createSDLTMessageBody();
+//        message.setBody(body);
+//        message.setVersion("1.0");
+//        SDLTMessage.Header header = sdltMessageObjectFactory.createSDLTMessageHeader();
+//        message.setHeader(header);
+//        System.out.println(marshalSdltMessageRequestObject(message, "http://sdlt.co.uk/Header https://online.sdlt.co.uk/schema/v1-0/SDLTMessage.xsd"));
+        
+        //ImportDocuments importDocuments = apiObjectFactory.createImportDocuments();
+        SDLT sdlt = sdltObjectFactory.createSDLT();
+
+        StringType id = sdltObjectFactory.createStringType();
         id.setValue("test");
-        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(requestObjectFactory.createSDLTFID(id));
-        importDocuments.getAny().add(sdlt);
-        return createImportDocumentsMessage(sdlt);
+        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(sdltObjectFactory.createSDLTFID(id));
+        //importDocuments.getAny().add(sdlt);
+        //return createImportDocumentsMessage(sdlt);
+        return sdlt;
     }
 
     public <T extends Object> T unmarshalResponseXml(InputStream xml, Class<T> type) throws JAXBException {
