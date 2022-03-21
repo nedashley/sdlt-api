@@ -76,35 +76,35 @@ public class SdltXmlHelper {
     }
 
     protected JAXBElement createStringType(String name, String value) {
-        StringType st = new StringType();
+        StringType st = sdltObjectFactory.createStringType();
         st.setValue(value);
         JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", name), StringType.class, st);
         return jaxbe;
     }
 
     protected JAXBElement createBooleanType(String name, Boolean value) {
-        BooleanType st = new BooleanType();
+        BooleanType st = sdltObjectFactory.createBooleanType();
         st.setValue(Objects.equals(Boolean.TRUE, value) ? "true" : "false");
         JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", name), BooleanType.class, st);
         return jaxbe;
     }
 
     protected JAXBElement createDateType(String name, LocalDate value) {
-        DateType st = new DateType();
+        DateType st = sdltObjectFactory.createDateType();
         st.setValue(value != null ? dateFormatter.format(value) : null);
         JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", name), DateType.class, st);
         return jaxbe;
     }
 
     protected JAXBElement createDateTimeType(String name, LocalDateTime value) {
-        DateTimeType st = new DateTimeType();
+        DateTimeType st = sdltObjectFactory.createDateTimeType();
         st.setValue(value != null ? dateTimeFormatter.format(value) : null);
         JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", name), DateTimeType.class, st);
         return jaxbe;
     }
 
     protected JAXBElement<XMLGregorianCalendar> createXmlGregorianCalendarType(String name, LocalDate value) {
-        StringType st = new StringType();
+        StringType st = sdltObjectFactory.createStringType();
         st.setValue(value != null ? dateFormatter.format(value) : null);
         JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/API", name), XMLGregorianCalendar.class, st);
         return jaxbe;
@@ -245,19 +245,19 @@ public class SdltXmlHelper {
                     field.setAccessible(true);
                     Object value = field.get(request);
                     if (value instanceof String) {
-                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createStringType(xmlValue.value(), (String) value));
+                        sdlt.getFIDOrFRefOrFDateCreated().add(createStringType(xmlValue.value(), (String) value));
                     } else if (value instanceof Boolean) {
-                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createBooleanType(xmlValue.value(), (Boolean) value));
+                        sdlt.getFIDOrFRefOrFDateCreated().add(createBooleanType(xmlValue.value(), (Boolean) value));
                     } else if (value instanceof Integer) {
-                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
+                        sdlt.getFIDOrFRefOrFDateCreated().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
                     } else if (value instanceof BigDecimal) {
-                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createStringType(xmlValue.value(), ((BigDecimal) value).setScale(0, RoundingMode.FLOOR).toPlainString()));
+                        sdlt.getFIDOrFRefOrFDateCreated().add(createStringType(xmlValue.value(), ((BigDecimal) value).setScale(0, RoundingMode.FLOOR).toPlainString()));
                     } else if (value instanceof LocalDate) {
-                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createDateType(xmlValue.value(), (LocalDate) value));
+                        sdlt.getFIDOrFRefOrFDateCreated().add(createDateType(xmlValue.value(), (LocalDate) value));
                     } else if (value instanceof LocalDateTime) {
-                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createDateTimeType(xmlValue.value(), (LocalDateTime) value));
+                        sdlt.getFIDOrFRefOrFDateCreated().add(createDateTimeType(xmlValue.value(), (LocalDateTime) value));
                     } else if (value instanceof BaseEnumType) {
-                        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
+                        sdlt.getFIDOrFRefOrFDateCreated().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
                     } else if (value != null) {
                         logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
                     }
@@ -290,7 +290,7 @@ public class SdltXmlHelper {
 
         StringType id = sdltObjectFactory.createStringType();
         id.setValue("test");
-        sdlt.getFIDOrFDateCreatedOrFUserNotes().add(sdltObjectFactory.createSDLTFID(id));
+        sdlt.getFIDOrFRefOrFDateCreated().add(sdltObjectFactory.createSDLTFID(id));
         //importDocuments.getAny().add(sdlt);
         //return createImportDocumentsMessage(sdlt);
         return sdlt;

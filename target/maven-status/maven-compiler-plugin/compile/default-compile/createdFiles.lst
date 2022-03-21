@@ -28,6 +28,7 @@ com/redmonkeysoftware/sdlt/model/request/sdltmessage/SDLTMessage.class
 com/redmonkeysoftware/sdlt/model/Sdlt3.class
 com/redmonkeysoftware/sdlt/model/SdltAccountOtp.class
 com/redmonkeysoftware/sdlt/model/response/GetPrintoutDocuments$Document.class
+com/redmonkeysoftware/sdlt/model/request/sdlt/SDLT$AP1.class
 com/redmonkeysoftware/sdlt/model/TransactionDescriptionType.class
 com/redmonkeysoftware/sdlt/model/request/sdlt/SDLT.class
 com/redmonkeysoftware/sdlt/model/exceptions/SdltAuthorisationException.class
@@ -38,6 +39,7 @@ com/redmonkeysoftware/sdlt/model/request/sdltmessage/ObjectFactory.class
 com/redmonkeysoftware/sdlt/model/response/GetAccountOTP.class
 com/redmonkeysoftware/sdlt/model/request/sdlt/DecimalType.class
 com/redmonkeysoftware/sdlt/model/SdltDocument.class
+com/redmonkeysoftware/sdlt/model/request/sdlt/SDLT$SDLT2$AP1.class
 com/redmonkeysoftware/sdlt/model/request/sdltmessage/SDLTMessage$Header.class
 com/redmonkeysoftware/sdlt/model/request/sdlt/EnumPropertyType.class
 com/redmonkeysoftware/sdlt/model/request/sdlt/SDLT$SDLT3.class

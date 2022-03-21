@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.redmonkeysoftware</groupId>
     <artifactId>sdlt-api</artifactId>
-    <version>1.1.0-RELEASE</version>
+    <version>1.1.1-RELEASE</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,83 +48,85 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>2.4</version>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.14.0</version>
                 <executions>
-                    <!--
                     <execution>
-                        <id>xjc-requests</id>
+                        <id>generate-sdltmessage</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>xjc</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <packageName>com.redmonkeysoftware.sdlt.model.request</packageName>
-                            <sources>
-                                <source>${project.basedir}/src/main/resources/requests</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    -->
-                    <execution>
-                        <id>xjc-sdltmessage</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                        <configuration>
-                            <packageName>com.redmonkeysoftware.sdlt.model.request.sdltmessage</packageName>
-                            <sources>
-                                <source>${project.basedir}/src/main/resources/requests/sdltmessage</source>
-                            </sources>
-                            <removeOldOutput>false</removeOldOutput>
-                            <clearOutputDir>false</clearOutputDir>
-                            <forceRegenerate>true</forceRegenerate>
+                            <schemaDirectory>${project.basedir}/src/main/resources/requests/sdltmessage</schemaDirectory>
+                            <generateDirectory>${project.build.directory}/generated-sources/jaxb</generateDirectory>
+                            <generatePackage>com.redmonkeysoftware.sdlt.model.request.sdltmessage</generatePackage>
+                            <schemaIncludes>
+                                <include>*.xsd</include>
+                            </schemaIncludes>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>xjc-sdlt</id>
+                        <id>generate-sdlt</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>xjc</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <packageName>com.redmonkeysoftware.sdlt.model.request.sdlt</packageName>
-                            <sources>
-                                <source>${project.basedir}/src/main/resources/requests/sdlt</source>
-                            </sources>
-                            <removeOldOutput>false</removeOldOutput>
-                            <clearOutputDir>false</clearOutputDir>
-                            <forceRegenerate>true</forceRegenerate>
+                            <schemaDirectory>${project.basedir}/src/main/resources/requests/sdlt</schemaDirectory>
+                            <generateDirectory>${project.build.directory}/generated-sources/jaxb</generateDirectory>
+                            <generatePackage>com.redmonkeysoftware.sdlt.model.request.sdlt</generatePackage>
+                            <schemaIncludes>
+                                <include>*.xsd</include>
+                            </schemaIncludes>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>xjc-api</id>
+                        <id>generate-api</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>xjc</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <packageName>com.redmonkeysoftware.sdlt.model.request.api</packageName>
-                            <sources>
-                                <source>${project.basedir}/src/main/resources/requests/api</source>
-                            </sources>
-                            <removeOldOutput>false</removeOldOutput>
-                            <clearOutputDir>false</clearOutputDir>
-                            <forceRegenerate>true</forceRegenerate>
+                            <schemaDirectory>${project.basedir}/src/main/resources/requests/api</schemaDirectory>
+                            <generateDirectory>${project.build.directory}/generated-sources/jaxb</generateDirectory>
+                            <generatePackage>com.redmonkeysoftware.sdlt.model.request.api</generatePackage>
+                            <schemaIncludes>
+                                <include>*.xsd</include>
+                            </schemaIncludes>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>xjc-responses</id>
+                        <id>generate-response</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>xjc</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <packageName>com.redmonkeysoftware.sdlt.model.response</packageName>
-                            <sources>
-                                <source>${project.basedir}/src/main/resources/responses</source>
-                            </sources>
-                            <clearOutputDir>false</clearOutputDir>
+                            <schemaDirectory>${project.basedir}/src/main/resources/responses</schemaDirectory>
+                            <generateDirectory>${project.build.directory}/generated-sources/jaxb</generateDirectory>
+                            <generatePackage>com.redmonkeysoftware.sdlt.model.response</generatePackage>
+                            <schemaIncludes>
+                                <include>*.xsd</include>
+                            </schemaIncludes>
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <cleanPackageDirectories>false</cleanPackageDirectories>
+                    <forceRegenerate>true</forceRegenerate>
+                    <args>
+                        <arg>-Xannotate</arg>
+                    </args>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                            <artifactId>jaxb2-basics-annotate</artifactId>
+                            <version>1.0.2</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
             </plugin>
         </plugins>
     </build>

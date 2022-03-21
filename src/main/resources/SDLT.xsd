@@ -1,18 +1,7 @@
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://sdlt.co.uk/SDLT"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://sdlt.co.uk/" xmlns:sdlt="http://sdlt.co.uk/SDLT"
-           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-           jaxb:version="2.1"
-           xmlns:annox="http://annox.dev.java.net"
-           jaxb:extensionBindingPrefixes="annox" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://annox.dev.java.net ">
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://sdlt.co.uk/SDLT" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://sdlt.co.uk/" xmlns:sdlt="http://sdlt.co.uk/SDLT">
     <xs:import namespace="http://sdlt.co.uk/" schemaLocation="https://online.sdlt.co.uk/schema/v1-0/DocumentType.xsd"/>
     <xs:element name="SDLT" type="sdlt:SDLT"/>
     <xs:complexType name="SDLT">
-        <xs:annotation>
-            <xs:appinfo>
-                <annox:annotate target="class">@javax.xml.bind.annotation.XmlRootElement(name="SDLT",namespace="http://sdlt.co.uk/SDLT")</annox:annotate>
-            </xs:appinfo>
-        </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element type="ns:StringType" name="F_ID"/>
             <xs:element type="ns:StringType" name="F_Ref"/>
@@ -24,9 +13,7 @@
             <xs:element type="ns:StringType" name="F_ChequeNumber"/>
             <xs:element type="ns:StringType" name="F_CountryCode">
                 <xs:annotation>
-                    <xs:documentation>Deprecated for import. SDLT/LTT selection is automatic and based on
-                        SDLT_PropertyLocalAuthorityCode field value.
-                    </xs:documentation>
+                    <xs:documentation>Deprecated for import. SDLT/LTT selection is automatic and based on SDLT_PropertyLocalAuthorityCode field value.</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element type="ns:BooleanType" name="F_Confidential"/>
