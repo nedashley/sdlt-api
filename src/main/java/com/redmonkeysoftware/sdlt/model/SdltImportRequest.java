@@ -196,8 +196,10 @@ public class SdltImportRequest implements Serializable {
     protected String vendorsAgentAddress3;
     @SdltXmlValue("SDLT_VendorsAgentAddress4")
     protected String vendorsAgentAddress4;
-    @SdltXmlValue("SDLT_VendorsAgentDXAddress")
-    protected String vendorsAgentDxAddress;
+    @SdltXmlValue("SDLT_VendorsAgentDXNo")
+    protected String vendorsAgentDxNo;
+    @SdltXmlValue("SDLT_VendorsAgentDXExchange")
+    protected String vendorsAgentDxExchange;
     @SdltXmlValue("SDLT_VendorsAgentEmail")
     protected String vendorsAgentEmail;
     @SdltXmlValue("SDLT_VendorsAgentReference")
@@ -206,8 +208,8 @@ public class SdltImportRequest implements Serializable {
     protected String vendorsAgentTelNumber;
     @SdltXmlValue("SDLT_Purchaser1NINumber")
     protected String purchaser1NINumber;
-    @SdltXmlValue("SDLT_Purchaser1DateOfBirth")
-    protected LocalDate purchaser1DateOfBirth;
+    @SdltXmlValue("SDLT_Purchaser1DoB")
+    protected LocalDate purchaser1DoB;
     @SdltXmlValue("SDLT_Purchaser1VATRegNo")
     protected String purchaser1VatRegNumber;
     @SdltXmlValue("SDLT_Purchaser1TaxRef")
@@ -262,8 +264,10 @@ public class SdltImportRequest implements Serializable {
     protected String purchaserAgentAddress3;
     @SdltXmlValue("SDLT_PurchaserAgentAddress4")
     protected String purchaserAgentAddress4;
-    @SdltXmlValue("SDLT_PurchaserAgentDXAddress")
-    protected String purchaserAgentDxAddress;
+    @SdltXmlValue("SDLT_PurchaserAgentDXNo")
+    protected String purchaserAgentDxNo;
+    @SdltXmlValue("SDLT_PurchaserAgentDXExchange")
+    protected String purchaserAgentDxExchange;
     @SdltXmlValue("SDLT_PurchaserAgentReference")
     protected String purchaserAgentReference;
     @SdltXmlValue("SDLT_PurchaserAgentTelNo")
@@ -1042,14 +1046,6 @@ public class SdltImportRequest implements Serializable {
         this.vendorsAgentAddress4 = vendorsAgentAddress4;
     }
 
-    public String getVendorsAgentDxAddress() {
-        return vendorsAgentDxAddress;
-    }
-
-    public void setVendorsAgentDxAddress(String vendorsAgentDxAddress) {
-        this.vendorsAgentDxAddress = vendorsAgentDxAddress;
-    }
-
     public String getVendorsAgentEmail() {
         return vendorsAgentEmail;
     }
@@ -1080,14 +1076,6 @@ public class SdltImportRequest implements Serializable {
 
     public void setPurchaser1NINumber(String purchaser1NINumber) {
         this.purchaser1NINumber = purchaser1NINumber;
-    }
-
-    public LocalDate getPurchaser1DateOfBirth() {
-        return purchaser1DateOfBirth;
-    }
-
-    public void setPurchaser1DateOfBirth(LocalDate purchaser1DateOfBirth) {
-        this.purchaser1DateOfBirth = purchaser1DateOfBirth;
     }
 
     public String getPurchaser1VatRegNumber() {
@@ -1306,14 +1294,6 @@ public class SdltImportRequest implements Serializable {
         this.purchaserAgentAddress4 = purchaserAgentAddress4;
     }
 
-    public String getPurchaserAgentDxAddress() {
-        return purchaserAgentDxAddress;
-    }
-
-    public void setPurchaserAgentDxAddress(String purchaserAgentDxAddress) {
-        this.purchaserAgentDxAddress = purchaserAgentDxAddress;
-    }
-
     public String getPurchaserAgentReference() {
         return purchaserAgentReference;
     }
@@ -1456,5 +1436,45 @@ public class SdltImportRequest implements Serializable {
 
     public void setSdlt4s(List<Sdlt4> sdlt4s) {
         this.sdlt4s = sdlt4s;
+    }
+
+    public String getVendorsAgentDxNo() {
+        return vendorsAgentDxNo;
+    }
+
+    public void setVendorsAgentDxNo(String vendorsAgentDxNo) {
+        this.vendorsAgentDxNo = vendorsAgentDxNo;
+    }
+
+    public String getVendorsAgentDxExchange() {
+        return vendorsAgentDxExchange;
+    }
+
+    public void setVendorsAgentDxExchange(String vendorsAgentDxExchange) {
+        this.vendorsAgentDxExchange = vendorsAgentDxExchange;
+    }
+
+    public LocalDate getPurchaser1DoB() {
+        return purchaser1DoB;
+    }
+
+    public void setPurchaser1DoB(LocalDate purchaser1DoB) {
+        this.purchaser1DoB = purchaser1DoB;
+    }
+
+    public String getPurchaserAgentDxNo() {
+        return purchaserAgentDxNo;
+    }
+
+    public void setPurchaserAgentDxNo(String purchaserAgentDxNo) {
+        this.purchaserAgentDxNo = purchaserAgentDxNo;
+    }
+
+    public String getPurchaserAgentDxExchange() {
+        return purchaserAgentDxExchange;
+    }
+
+    public void setPurchaserAgentDxExchange(String purchaserAgentDxExchange) {
+        this.purchaserAgentDxExchange = purchaserAgentDxExchange;
     }
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SDLTMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://sdlt.co.uk/Header"
+             xsi:schemaLocation="http://sdlt.co.uk/Header https://online.sdlt.co.uk/schema/v1-0/SDLTMessage.xsd">
+    <Version>1.0</Version>
+    <Header/>
+    <Body>
+        <ImportDocuments xmlns="http://sdlt.co.uk/API"
+                         xsi:schemaLocation="http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/ImportDocuments.xsd">
+            <SDLT xsi:schemaLocation="http://sdlt.co.uk/SDLT https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd"
+                  xmlns="http://sdlt.co.uk/SDLT" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <F_ID>MUT23-P</F_ID>
+                <F_DateCreated>2021-01-12T10:06:15.483</F_DateCreated>
+                <F_UserNotes>Submitted by: admin</F_UserNotes>
+                <F_FTBExemptionYesNo>false</F_FTBExemptionYesNo>
+                <SDLT_PropertyTypeCode>01</SDLT_PropertyTypeCode>
+                <SDLT_TransactionDescriptionCode>F</SDLT_TransactionDescriptionCode>
+                <SDLT_InterestCreatedCode>FT_1</SDLT_InterestCreatedCode>
+                <SDLT_DateOfTransaction>2020-12-18</SDLT_DateOfTransaction>
+                <SDLT_DateOfContract>2020-12-15</SDLT_DateOfContract>
+                <SDLT_AnyLandExchangedYesNo>false</SDLT_AnyLandExchangedYesNo>
+                <SDLT_ClaimingTaxReliefYesNo>false</SDLT_ClaimingTaxReliefYesNo>
+                <SDLT_TotalConsiderationIncVAT>375000</SDLT_TotalConsiderationIncVAT>
+                <SDLT_PurchaserTypeCode>1</SDLT_PurchaserTypeCode>
+                <SDLT_ConsiderationFormCode1>30</SDLT_ConsiderationFormCode1>
+                <SDLT_TransactionLinkedYesNo>false</SDLT_TransactionLinkedYesNo>
+                <SDLT_TotalTaxDue>0</SDLT_TotalTaxDue>
+                <SDLT_TotalTaxPaid>0</SDLT_TotalTaxPaid>
+                <SDLT_NumberOfPropertiesIncluded>1</SDLT_NumberOfPropertiesIncluded>
+                <SDLT_PropertyAddressPostcode>GL2 0NS</SDLT_PropertyAddressPostcode>
+                <SDLT_PropertyAddressBuildingNo>1</SDLT_PropertyAddressBuildingNo>
+                <SDLT_PropertyAddress1>Braeburn Close</SDLT_PropertyAddress1>
+                <SDLT_PropertyAddress3>Gloucester</SDLT_PropertyAddress3>
+                <SDLT_PropertyAddress4>Gloucestershire</SDLT_PropertyAddress4>
+                <SDLT_PropertyLocalAuthorityCode>1620</SDLT_PropertyLocalAuthorityCode>
+                <SDLT_PropertyTitleNumber>GR211344</SDLT_PropertyTitleNumber>
+                <SDLT_TotalNumberOfVendors>1</SDLT_TotalNumberOfVendors>
+                <SDLT_Vendor1Title>Mr</SDLT_Vendor1Title>
+                <SDLT_Vendor1Surname>Nicholson</SDLT_Vendor1Surname>
+                <SDLT_Vendor1FirstName1>William</SDLT_Vendor1FirstName1>
+                <SDLT_VendorsAgentFirmName>Dobbs &amp; Drew</SDLT_VendorsAgentFirmName>
+                <SDLT_VendorsAgentAddressPostcode>GL15 5RA</SDLT_VendorsAgentAddressPostcode>
+                <SDLT_VendorsAgentAddressBuildingNo>51</SDLT_VendorsAgentAddressBuildingNo>
+                <SDLT_VendorsAgentAddress1>Newerne Street</SDLT_VendorsAgentAddress1>
+                <SDLT_VendorsAgentAddress3>Lydney</SDLT_VendorsAgentAddress3>
+                <SDLT_VendorsAgentAddress4>Gloucestershire</SDLT_VendorsAgentAddress4>
+                <SDLT_VendorsAgentDXAddress></SDLT_VendorsAgentDXAddress>
+                <SDLT_VendorsAgentEmail>sue.drew@dobbsanddrew.co.uk</SDLT_VendorsAgentEmail>
+                <SDLT_VendorsAgentTelNo>01594 562239</SDLT_VendorsAgentTelNo>
+                <SDLT_Purchaser1NINumber>SE063714C</SDLT_Purchaser1NINumber>
+                <SDLT_Purchaser1DateOfBirth>1971-06-30</SDLT_Purchaser1DateOfBirth>
+                <SDLT_TotalNumberOfPurchasers>2</SDLT_TotalNumberOfPurchasers>
+                <SDLT_Purchaser1Title>Mr</SDLT_Purchaser1Title>
+                <SDLT_Purchaser1Surname>Muthu</SDLT_Purchaser1Surname>
+                <SDLT_Purchaser1FirstName1>Prakash</SDLT_Purchaser1FirstName1>
+                <SDLT_Purchaser1AddressPostcode>GL3 3DX</SDLT_Purchaser1AddressPostcode>
+                <SDLT_Purchaser1AddressBuildingNo>82</SDLT_Purchaser1AddressBuildingNo>
+                <SDLT_Purchaser1Address1>Mayfield Drive</SDLT_Purchaser1Address1>
+                <SDLT_Purchaser1Address3>Gloucester</SDLT_Purchaser1Address3>
+                <SDLT_Purchaser1Address4>Gloucestershire</SDLT_Purchaser1Address4>
+                <SDLT_Purchaser1ActingAsTrusteeYesNo>false</SDLT_Purchaser1ActingAsTrusteeYesNo>
+                <SDLT_Purchaser1TelNo>01452 627247</SDLT_Purchaser1TelNo>
+                <SDLT_PurchaserAgentFirmName>Convey Law</SDLT_PurchaserAgentFirmName>
+                <SDLT_PurchaserAgentAddressPostcode>NP20 1JE</SDLT_PurchaserAgentAddressPostcode>
+                <SDLT_PurchaserAgentAddressBuildingNo>Maxwell Chambers</SDLT_PurchaserAgentAddressBuildingNo>
+                <SDLT_PurchaserAgentAddress1>34-38 Stow Hill</SDLT_PurchaserAgentAddress1>
+                <SDLT_PurchaserAgentAddress3>Newport</SDLT_PurchaserAgentAddress3>
+                <SDLT_PurchaserAgentAddress4></SDLT_PurchaserAgentAddress4>
+                <SDLT_PurchaserAgentDXAddress></SDLT_PurchaserAgentDXAddress>
+                <SDLT_PurchaserAgentReference>MUT23-P</SDLT_PurchaserAgentReference>
+                <SDLT_PurchaserAgentTelNo>01633 261255</SDLT_PurchaserAgentTelNo>
+                <SDLT_PurchaserAgentEmail>thomasgood@conveylaw.com</SDLT_PurchaserAgentEmail>
+                <SDLT_Purchaser2Title>Mrs</SDLT_Purchaser2Title>
+                <SDLT_Purchaser2Surname>Prakash</SDLT_Purchaser2Surname>
+                <SDLT_Purchaser2FirstName1>Meera</SDLT_Purchaser2FirstName1>
+                <SDLT_Purchaser2FirstName2></SDLT_Purchaser2FirstName2>
+                <SDLT_Purchaser2AddressPostcode>GL3 3DX</SDLT_Purchaser2AddressPostcode>
+                <SDLT_Purchaser2AddressBuildingNo>82</SDLT_Purchaser2AddressBuildingNo>
+                <SDLT_Purchaser2Address1>82 Mayfield Drive</SDLT_Purchaser2Address1>
+                <SDLT_Purchaser2Address2>Gloucester</SDLT_Purchaser2Address2>
+                <SDLT_Purchaser2Address3>Gloucester</SDLT_Purchaser2Address3>
+                <SDLT_Purchaser2Address4>Gloucestershire</SDLT_Purchaser2Address4>
+                <SDLT_Purchaser2ActingAsTrusteeYesNo>false</SDLT_Purchaser2ActingAsTrusteeYesNo>
+            </SDLT>
+        </ImportDocuments>
+    </Body>
+</SDLTMessage>
