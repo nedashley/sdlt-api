@@ -16,14 +16,14 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * <p>Java class for TaxPaymentMethodType complex type.
+ * <p>Java class for EnumPurchaserClientAuthorsiation complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="TaxPaymentMethodType"&gt;
+ * &lt;complexType name="EnumPurchaserClientAuthorsiation"&gt;
  *   &lt;simpleContent&gt;
- *     &lt;extension base="&lt;http://sdlt.co.uk/&gt;SDLTTaxPaymentMethodEnumeration"&gt;
+ *     &lt;extension base="&lt;http://sdlt.co.uk/&gt;SDLTPurchaserClientAuthorisationEnumeration"&gt;
  *       &lt;attGroup ref="{http://sdlt.co.uk/}DocumentFieldAttributes"/&gt;
  *     &lt;/extension&gt;
  *   &lt;/simpleContent&gt;
@@ -33,10 +33,10 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TaxPaymentMethodType", propOrder = {
+@XmlType(name = "EnumPurchaserClientAuthorsiation", propOrder = {
     "value"
 })
-public class TaxPaymentMethodType {
+public class EnumPurchaserClientAuthorsiation {
 
     @XmlValue
     protected String value;
