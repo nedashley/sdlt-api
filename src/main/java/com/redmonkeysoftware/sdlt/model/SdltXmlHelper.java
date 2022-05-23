@@ -1,10 +1,5 @@
 package com.redmonkeysoftware.sdlt.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.redmonkeysoftware.sdlt.model.request.api.*;
 import com.redmonkeysoftware.sdlt.model.request.api.GetDocumentsStatus.Filter;
 import com.redmonkeysoftware.sdlt.model.request.sdlt.BooleanType;
@@ -26,7 +21,6 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -54,7 +48,7 @@ public class SdltXmlHelper {
     
     private JAXBContext responseContext = JAXBContext.newInstance("com.redmonkeysoftware.sdlt.model.response");
     private com.redmonkeysoftware.sdlt.model.response.ObjectFactory responseObjectFactory = new com.redmonkeysoftware.sdlt.model.response.ObjectFactory();
-    private ObjectMapper mapper = new ObjectMapper();
+
     private SdltXmlHelper() throws JAXBException {
 
     }
@@ -432,23 +426,6 @@ public class SdltXmlHelper {
         StringType id = sdltObjectFactory.createStringType();
         id.setValue("test");
         sdlt.getFIDOrFRefOrFDateCreated().add(sdltObjectFactory.createSDLTFID(id));
-        Sdlt2 sdlt21 = new Sdlt2();
-        sdlt21.setFirstName("sam");
-        sdlt21.setSecondName("sam");
-        sdlt21.setSurname("----");
-        List<Sdlt2> list = Stream.of(sdlt21, sdlt21).collect(Collectors.toList());
-
-        for(Sdlt2 temp : list) {
-            SDLT.SDLT2 val = convertToSDLT2(temp);
-            JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", "SDLT2"), SDLT.SDLT2.class, val);
-            sdlt.getFIDOrFRefOrFDateCreated().add(jaxbe);
-        }
-
-//        SdltImportRequest s = new SdltImportRequest();
-//        s.setId("");
-//        s.setAnyLandExchanged(true);
-//        s.setCreated(LocalDateTime.now());
-//        s.setFirstTimeBuyer(true);
         //importDocuments.getAny().add(sdlt);
         //return createImportDocumentsMessage(sdlt);
         return sdlt;

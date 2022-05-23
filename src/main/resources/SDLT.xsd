@@ -488,7 +488,7 @@
                 </xs:complexType>
             </xs:element>
 
-            <xs:element type="ns:Sdlt2" name="SDLT2">
+            <xs:element name="SDLT2">
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:element type="ns:StringType" name="SDLT2_AdditionalVendorOrPuchaser"/>
@@ -637,7 +637,7 @@
                 </xs:complexType>
             </xs:element>
 
-            <xs:element type="ns:Sdlt3" name="SDLT3">
+            <xs:element name="SDLT3">
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:element type="ns:EnumPropertyType" name="SDLT3_PropertyTypeCode"/>
@@ -679,7 +679,7 @@
                 </xs:complexType>
             </xs:element>
 
-            <xs:element type="ns:Sdlt4" name="SDLT4">
+            <xs:element name="SDLT4">
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:element type="ns:BooleanType" name="SDLT4_ConsiderationStockYesNo"/>
