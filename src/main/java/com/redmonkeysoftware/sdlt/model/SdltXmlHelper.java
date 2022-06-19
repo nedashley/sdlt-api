@@ -290,28 +290,25 @@ public class SdltXmlHelper {
                         sdlt.getFIDOrFRefOrFDateCreated().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
                     } else if (value instanceof List) {
                         List<Object> newValue = (List<Object>) value;
-                        if(!newValue.isEmpty() && newValue.get(0) instanceof Sdlt2) {
-                            List<JAXBElement<?>> results = createSdlt2Type(xmlValue.value(), newValue.stream().map(x -> {
-                                return  (Sdlt2) x;
-                            }).collect(Collectors.toList()));
-                            for(JAXBElement<?> data : results){
+                        if (!newValue.isEmpty() && newValue.get(0) instanceof Sdlt2) {
+                            List<JAXBElement<?>> results = createSdlt2Type(xmlValue.value(), newValue.stream().map(Sdlt2.class::cast).collect(Collectors.toList()));
+                            for (JAXBElement<?> data : results) {
                                 sdlt.getFIDOrFRefOrFDateCreated().add(data);
                             }
                         }
-
-                        if(!newValue.isEmpty() && newValue.get(0) instanceof Sdlt3) {
-                            List<JAXBElement<?>> results = createSdlt3Type(xmlValue.value(), newValue.stream().map(x -> (Sdlt3) x).collect(Collectors.toList()));
-                            for(JAXBElement<?> data : results){
+                        if (!newValue.isEmpty() && newValue.get(0) instanceof Sdlt3) {
+                            List<JAXBElement<?>> results = createSdlt3Type(xmlValue.value(), newValue.stream().map(Sdlt3.class::cast).collect(Collectors.toList()));
+                            for (JAXBElement<?> data : results) {
                                 sdlt.getFIDOrFRefOrFDateCreated().add(data);
                             }
                         }
-                        if(!newValue.isEmpty() && newValue.get(0) instanceof Sdlt4) {
-                            List<JAXBElement<?>> results = createSdlt4Type(xmlValue.value(), newValue.stream().map(x -> (Sdlt4) x).collect(Collectors.toList()));
-                            for(JAXBElement<?> data : results){
+                        if (!newValue.isEmpty() && newValue.get(0) instanceof Sdlt4) {
+                            List<JAXBElement<?>> results = createSdlt4Type(xmlValue.value(), newValue.stream().map(Sdlt4.class::cast).collect(Collectors.toList()));
+                            for (JAXBElement<?> data : results) {
                                 sdlt.getFIDOrFRefOrFDateCreated().add(data);
                             }
                         }
-                    }else if (value != null) {
+                    } else if (value != null) {
                         logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
                     }
                 }
@@ -339,7 +336,7 @@ public class SdltXmlHelper {
                         sdlt.getSDLT2AdditionalVendorOrPuchaserOrSDLT2AdditionalVendorPurchaserTitleOrSDLT2AdditionalVendorPurchaserSurname().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
                     } else if (value instanceof BaseEnumType) {
                         sdlt.getSDLT2AdditionalVendorOrPuchaserOrSDLT2AdditionalVendorPurchaserTitleOrSDLT2AdditionalVendorPurchaserSurname().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
-                    }else if (value != null) {
+                    } else if (value != null) {
                         logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
                     }
                 }
@@ -366,7 +363,7 @@ public class SdltXmlHelper {
                         sdlt3.getSDLT3PropertyTypeCodeOrSDLT3PropertyLocalAuthorityCodeOrSDLT3PropertyTitleNumber().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
                     } else if (value instanceof BaseEnumType) {
                         sdlt3.getSDLT3PropertyTypeCodeOrSDLT3PropertyLocalAuthorityCodeOrSDLT3PropertyTitleNumber().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
-                    }else if (value != null) {
+                    } else if (value != null) {
                         logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
                     }
                 }
@@ -393,7 +390,7 @@ public class SdltXmlHelper {
                         sdlt4.getSDLT4ConsiderationStockYesNoOrSDLT4ConsiderationGoodWillYesNoOrSDLT4ConsiderationOtherYesNo().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
                     } else if (value instanceof BaseEnumType) {
                         sdlt4.getSDLT4ConsiderationStockYesNoOrSDLT4ConsiderationGoodWillYesNoOrSDLT4ConsiderationOtherYesNo().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
-                    }else if (value != null) {
+                    } else if (value != null) {
                         logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
                     }
                 }
