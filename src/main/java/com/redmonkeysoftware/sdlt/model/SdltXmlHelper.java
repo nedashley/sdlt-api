@@ -1,17 +1,13 @@
 package com.redmonkeysoftware.sdlt.model;
 
-import com.redmonkeysoftware.sdlt.model.request.api.GetAccountOTP;
-import com.redmonkeysoftware.sdlt.model.request.api.GetDocumentsStatus;
+import com.redmonkeysoftware.sdlt.model.request.api.*;
 import com.redmonkeysoftware.sdlt.model.request.api.GetDocumentsStatus.Filter;
-import com.redmonkeysoftware.sdlt.model.request.api.GetPrintoutDocuments;
-import com.redmonkeysoftware.sdlt.model.request.api.ImportDocuments;
-import com.redmonkeysoftware.sdlt.model.request.api.Test;
 import com.redmonkeysoftware.sdlt.model.request.sdlt.BooleanType;
 import com.redmonkeysoftware.sdlt.model.request.sdlt.DateTimeType;
 import com.redmonkeysoftware.sdlt.model.request.sdlt.DateType;
 import com.redmonkeysoftware.sdlt.model.request.sdlt.SDLT;
 import com.redmonkeysoftware.sdlt.model.request.sdlt.StringType;
-import com.redmonkeysoftware.sdlt.model.request.sdltmessage.SDLTMessage;
+
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -20,9 +16,11 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -30,6 +28,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
+
+import com.redmonkeysoftware.sdlt.model.request.sdltmessage.SDLTMessage;
 import org.apache.commons.lang3.StringUtils;
 
 public class SdltXmlHelper {
@@ -87,6 +87,36 @@ public class SdltXmlHelper {
         st.setValue(Objects.equals(Boolean.TRUE, value) ? "true" : "false");
         JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", name), BooleanType.class, st);
         return jaxbe;
+    }
+
+    protected List<JAXBElement<?>> createSdlt2Type(String name, List<Sdlt2> value) {
+        SDLT.SDLT2 st = sdltObjectFactory.createSDLTSDLT2();
+        for(Sdlt2 sdlt2 : value) {
+            SDLT.SDLT2 val = convertToSDLT2(sdlt2);
+            JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", name), SDLT.SDLT2.class, val);
+            st.getSDLT2AdditionalVendorOrPuchaserOrSDLT2AdditionalVendorPurchaserTitleOrSDLT2AdditionalVendorPurchaserSurname().add(jaxbe);
+        }
+        return st.getSDLT2AdditionalVendorOrPuchaserOrSDLT2AdditionalVendorPurchaserTitleOrSDLT2AdditionalVendorPurchaserSurname();
+    }
+
+    protected List<JAXBElement<?>> createSdlt3Type(String name, List<Sdlt3> value) {
+        SDLT.SDLT3 st = sdltObjectFactory.createSDLTSDLT3();
+        for(Sdlt3 sdlt3 : value) {
+            SDLT.SDLT3 val = convertToSDLT3(sdlt3);
+            JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", name), SDLT.SDLT3.class, val);
+            st.getSDLT3PropertyTypeCodeOrSDLT3PropertyLocalAuthorityCodeOrSDLT3PropertyTitleNumber().add(jaxbe);
+        }
+        return st.getSDLT3PropertyTypeCodeOrSDLT3PropertyLocalAuthorityCodeOrSDLT3PropertyTitleNumber();
+    }
+
+    protected List<JAXBElement<?>> createSdlt4Type(String name, List<Sdlt4> value) {
+        SDLT.SDLT4 st = sdltObjectFactory.createSDLTSDLT4();
+        for(Sdlt4 sdlt4 : value){
+            SDLT.SDLT4 val = convertToSDLT4(sdlt4);
+            JAXBElement jaxbe = new JAXBElement(new QName("http://sdlt.co.uk/SDLT", name), SDLT.SDLT4.class, val);
+            st.getSDLT4ConsiderationStockYesNoOrSDLT4ConsiderationGoodWillYesNoOrSDLT4ConsiderationOtherYesNo().add(jaxbe);
+        }
+        return st.getSDLT4ConsiderationStockYesNoOrSDLT4ConsiderationGoodWillYesNoOrSDLT4ConsiderationOtherYesNo();
     }
 
     protected JAXBElement createDateType(String name, LocalDate value) {
@@ -258,6 +288,26 @@ public class SdltXmlHelper {
                         sdlt.getFIDOrFRefOrFDateCreated().add(createDateTimeType(xmlValue.value(), (LocalDateTime) value));
                     } else if (value instanceof BaseEnumType) {
                         sdlt.getFIDOrFRefOrFDateCreated().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
+                    } else if (value instanceof List) {
+                        List<Object> newValue = (List<Object>) value;
+                        if (!newValue.isEmpty() && newValue.get(0) instanceof Sdlt2) {
+                            List<JAXBElement<?>> results = createSdlt2Type(xmlValue.value(), newValue.stream().map(Sdlt2.class::cast).collect(Collectors.toList()));
+                            for (JAXBElement<?> data : results) {
+                                sdlt.getFIDOrFRefOrFDateCreated().add(data);
+                            }
+                        }
+                        if (!newValue.isEmpty() && newValue.get(0) instanceof Sdlt3) {
+                            List<JAXBElement<?>> results = createSdlt3Type(xmlValue.value(), newValue.stream().map(Sdlt3.class::cast).collect(Collectors.toList()));
+                            for (JAXBElement<?> data : results) {
+                                sdlt.getFIDOrFRefOrFDateCreated().add(data);
+                            }
+                        }
+                        if (!newValue.isEmpty() && newValue.get(0) instanceof Sdlt4) {
+                            List<JAXBElement<?>> results = createSdlt4Type(xmlValue.value(), newValue.stream().map(Sdlt4.class::cast).collect(Collectors.toList()));
+                            for (JAXBElement<?> data : results) {
+                                sdlt.getFIDOrFRefOrFDateCreated().add(data);
+                            }
+                        }
                     } else if (value != null) {
                         logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
                     }
@@ -269,21 +319,103 @@ public class SdltXmlHelper {
         return sdlt;
     }
 
+
+    public SDLT.SDLT2 convertToSDLT2(Sdlt2 request) {
+        SDLT.SDLT2 sdlt = sdltObjectFactory.createSDLTSDLT2();
+        try {
+            for (Field field : request.getClass().getDeclaredFields()) {
+                if (field.isAnnotationPresent(SdltXmlValue.class)) {
+                    SdltXmlValue xmlValue = field.getAnnotation(SdltXmlValue.class);
+                    field.setAccessible(true);
+                    Object value = field.get(request);
+                    if (value instanceof String) {
+                        sdlt.getSDLT2AdditionalVendorOrPuchaserOrSDLT2AdditionalVendorPurchaserTitleOrSDLT2AdditionalVendorPurchaserSurname().add(createStringType(xmlValue.value(), (String) value));
+                    } else if (value instanceof Boolean) {
+                        sdlt.getSDLT2AdditionalVendorOrPuchaserOrSDLT2AdditionalVendorPurchaserTitleOrSDLT2AdditionalVendorPurchaserSurname().add(createBooleanType(xmlValue.value(), (Boolean) value));
+                    } else if (value instanceof Integer) {
+                        sdlt.getSDLT2AdditionalVendorOrPuchaserOrSDLT2AdditionalVendorPurchaserTitleOrSDLT2AdditionalVendorPurchaserSurname().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
+                    } else if (value instanceof BaseEnumType) {
+                        sdlt.getSDLT2AdditionalVendorOrPuchaserOrSDLT2AdditionalVendorPurchaserTitleOrSDLT2AdditionalVendorPurchaserSurname().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
+                    } else if (value != null) {
+                        logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
+                    }
+                }
+            }
+        } catch (IllegalAccessException | IllegalArgumentException | SecurityException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Error generating SDLT", e);
+        }
+        return sdlt;
+    }
+
+    public SDLT.SDLT3 convertToSDLT3(Sdlt3 request) {
+        SDLT.SDLT3 sdlt3 = sdltObjectFactory.createSDLTSDLT3();
+        try {
+            for (Field field : request.getClass().getDeclaredFields()) {
+                if (field.isAnnotationPresent(SdltXmlValue.class)) {
+                    SdltXmlValue xmlValue = field.getAnnotation(SdltXmlValue.class);
+                    field.setAccessible(true);
+                    Object value = field.get(request);
+                    if (value instanceof String) {
+                        sdlt3.getSDLT3PropertyTypeCodeOrSDLT3PropertyLocalAuthorityCodeOrSDLT3PropertyTitleNumber().add(createStringType(xmlValue.value(), (String) value));
+                    } else if (value instanceof Boolean) {
+                        sdlt3.getSDLT3PropertyTypeCodeOrSDLT3PropertyLocalAuthorityCodeOrSDLT3PropertyTitleNumber().add(createBooleanType(xmlValue.value(), (Boolean) value));
+                    } else if (value instanceof Integer) {
+                        sdlt3.getSDLT3PropertyTypeCodeOrSDLT3PropertyLocalAuthorityCodeOrSDLT3PropertyTitleNumber().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
+                    } else if (value instanceof BaseEnumType) {
+                        sdlt3.getSDLT3PropertyTypeCodeOrSDLT3PropertyLocalAuthorityCodeOrSDLT3PropertyTitleNumber().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
+                    } else if (value != null) {
+                        logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
+                    }
+                }
+            }
+        } catch (IllegalAccessException | IllegalArgumentException | SecurityException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Error generating SDLT", e);
+        }
+        return sdlt3;
+    }
+
+    public SDLT.SDLT4 convertToSDLT4(Sdlt4 request) {
+        SDLT.SDLT4 sdlt4 = sdltObjectFactory.createSDLTSDLT4();
+        try {
+            for (Field field : request.getClass().getDeclaredFields()) {
+                if (field.isAnnotationPresent(SdltXmlValue.class)) {
+                    SdltXmlValue xmlValue = field.getAnnotation(SdltXmlValue.class);
+                    field.setAccessible(true);
+                    Object value = field.get(request);
+                    if (value instanceof String) {
+                        sdlt4.getSDLT4ConsiderationStockYesNoOrSDLT4ConsiderationGoodWillYesNoOrSDLT4ConsiderationOtherYesNo().add(createStringType(xmlValue.value(), (String) value));
+                    } else if (value instanceof Boolean) {
+                        sdlt4.getSDLT4ConsiderationStockYesNoOrSDLT4ConsiderationGoodWillYesNoOrSDLT4ConsiderationOtherYesNo().add(createBooleanType(xmlValue.value(), (Boolean) value));
+                    } else if (value instanceof Integer) {
+                        sdlt4.getSDLT4ConsiderationStockYesNoOrSDLT4ConsiderationGoodWillYesNoOrSDLT4ConsiderationOtherYesNo().add(createStringType(xmlValue.value(), ((Integer) value).toString()));
+                    } else if (value instanceof BaseEnumType) {
+                        sdlt4.getSDLT4ConsiderationStockYesNoOrSDLT4ConsiderationGoodWillYesNoOrSDLT4ConsiderationOtherYesNo().add(createStringType(xmlValue.value(), ((BaseEnumType) value).getCode()));
+                    } else if (value != null) {
+                        logger.log(Level.WARNING, "Not sure how to map field of type: " + field.getClass().getName());
+                    }
+                }
+            }
+        } catch (IllegalAccessException | IllegalArgumentException | SecurityException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Error generating SDLT", e);
+        }
+        return sdlt4;
+    }
+
     public SDLT generateTestSdlt() throws JAXBException {
-//        SDLT sdlt2 = sdltObjectFactory.createSDLT();
-//        String sdltXml = marshalSdltRequestObject(sdlt2, "http://sdlt.co.uk/SDLT https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
-//        
-//        System.out.println(sdltXml);
-//        ImportDocuments id2 = apiObjectFactory.createImportDocuments();
-//        String idXml = marshalApiRequestObject(id2, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/ImportDocuments.xsd");
-//        System.out.println(idXml);
-//        SDLTMessage message = sdltMessageObjectFactory.createSDLTMessage();
-//        SDLTMessage.Body body = sdltMessageObjectFactory.createSDLTMessageBody();
-//        message.setBody(body);
-//        message.setVersion("1.0");
-//        SDLTMessage.Header header = sdltMessageObjectFactory.createSDLTMessageHeader();
-//        message.setHeader(header);
-//        System.out.println(marshalSdltMessageRequestObject(message, "http://sdlt.co.uk/Header https://online.sdlt.co.uk/schema/v1-0/SDLTMessage.xsd"));
+        SDLT sdlt2 = sdltObjectFactory.createSDLT();
+        String sdltXml = marshalSdltRequestObject(sdlt2, "http://sdlt.co.uk/SDLT https://online.sdlt.co.uk/schema/v1-0/SDLT.xsd");
+
+        System.out.println(sdltXml);
+        ImportDocuments id2 = apiObjectFactory.createImportDocuments();
+        String idXml = marshalApiRequestObject(id2, "http://sdlt.co.uk/API https://online.sdlt.co.uk/schema/v1-0/ImportDocuments.xsd");
+        System.out.println(idXml);
+        SDLTMessage message = sdltMessageObjectFactory.createSDLTMessage();
+        SDLTMessage.Body body = sdltMessageObjectFactory.createSDLTMessageBody();
+        message.setBody(body);
+        message.setVersion("1.0");
+        SDLTMessage.Header header = sdltMessageObjectFactory.createSDLTMessageHeader();
+        message.setHeader(header);
+        System.out.println(marshalSdltMessageRequestObject(message, "http://sdlt.co.uk/Header https://online.sdlt.co.uk/schema/v1-0/SDLTMessage.xsd"));
         
         //ImportDocuments importDocuments = apiObjectFactory.createImportDocuments();
         SDLT sdlt = sdltObjectFactory.createSDLT();

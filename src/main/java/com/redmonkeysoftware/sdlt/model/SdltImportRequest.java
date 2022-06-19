@@ -1,5 +1,7 @@
 package com.redmonkeysoftware.sdlt.model;
 
+import com.redmonkeysoftware.sdlt.model.request.sdlt.SDLT;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -298,8 +300,11 @@ public class SdltImportRequest implements Serializable {
     protected String purchaser2Address4;
     @SdltXmlValue("SDLT_Purchaser2ActingAsTrusteeYesNo")
     protected Boolean purchaser2ActingAsTrustee;
+    @SdltXmlValue("SDLT2")
     protected List<Sdlt2> sdlt2s = new ArrayList<>();
+    @SdltXmlValue("SDLT3")
     protected List<Sdlt3> sdlt3s = new ArrayList<>();
+    @SdltXmlValue("SDLT4")
     protected List<Sdlt4> sdlt4s = new ArrayList<>();
 
     public String getId() {
@@ -1414,6 +1419,22 @@ public class SdltImportRequest implements Serializable {
         this.purchaser2ActingAsTrustee = purchaser2ActingAsTrustee;
     }
 
+    public String getVendorsAgentDxNo() {
+        return vendorsAgentDxNo;
+    }
+
+    public void setVendorsAgentDxNo(String vendorsAgentDxNo) {
+        this.vendorsAgentDxNo = vendorsAgentDxNo;
+    }
+
+    public String getVendorsAgentDxExchange() {
+        return vendorsAgentDxExchange;
+    }
+
+    public void setVendorsAgentDxExchange(String vendorsAgentDxExchange) {
+        this.vendorsAgentDxExchange = vendorsAgentDxExchange;
+    }
+
     public List<Sdlt2> getSdlt2s() {
         return sdlt2s;
     }
@@ -1436,22 +1457,6 @@ public class SdltImportRequest implements Serializable {
 
     public void setSdlt4s(List<Sdlt4> sdlt4s) {
         this.sdlt4s = sdlt4s;
-    }
-
-    public String getVendorsAgentDxNo() {
-        return vendorsAgentDxNo;
-    }
-
-    public void setVendorsAgentDxNo(String vendorsAgentDxNo) {
-        this.vendorsAgentDxNo = vendorsAgentDxNo;
-    }
-
-    public String getVendorsAgentDxExchange() {
-        return vendorsAgentDxExchange;
-    }
-
-    public void setVendorsAgentDxExchange(String vendorsAgentDxExchange) {
-        this.vendorsAgentDxExchange = vendorsAgentDxExchange;
     }
 
     public LocalDate getPurchaser1DoB() {
