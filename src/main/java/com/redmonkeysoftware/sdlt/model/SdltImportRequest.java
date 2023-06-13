@@ -298,8 +298,13 @@ public class SdltImportRequest implements Serializable {
     protected String purchaser2Address4;
     @SdltXmlValue("SDLT_Purchaser2ActingAsTrusteeYesNo")
     protected Boolean purchaser2ActingAsTrustee;
+    @SdltXmlValue("LTT_Purchaser1Certificate")
+    protected String purchaser1Certificate;
+    @SdltXmlValue("SDLT2")
     protected List<Sdlt2> sdlt2s = new ArrayList<>();
+    @SdltXmlValue("SDLT3")
     protected List<Sdlt3> sdlt3s = new ArrayList<>();
+    @SdltXmlValue("SDLT4")
     protected List<Sdlt4> sdlt4s = new ArrayList<>();
 
     public String getId() {
@@ -1414,6 +1419,22 @@ public class SdltImportRequest implements Serializable {
         this.purchaser2ActingAsTrustee = purchaser2ActingAsTrustee;
     }
 
+    public String getVendorsAgentDxNo() {
+        return vendorsAgentDxNo;
+    }
+
+    public void setVendorsAgentDxNo(String vendorsAgentDxNo) {
+        this.vendorsAgentDxNo = vendorsAgentDxNo;
+    }
+
+    public String getVendorsAgentDxExchange() {
+        return vendorsAgentDxExchange;
+    }
+
+    public void setVendorsAgentDxExchange(String vendorsAgentDxExchange) {
+        this.vendorsAgentDxExchange = vendorsAgentDxExchange;
+    }
+
     public List<Sdlt2> getSdlt2s() {
         return sdlt2s;
     }
@@ -1438,22 +1459,6 @@ public class SdltImportRequest implements Serializable {
         this.sdlt4s = sdlt4s;
     }
 
-    public String getVendorsAgentDxNo() {
-        return vendorsAgentDxNo;
-    }
-
-    public void setVendorsAgentDxNo(String vendorsAgentDxNo) {
-        this.vendorsAgentDxNo = vendorsAgentDxNo;
-    }
-
-    public String getVendorsAgentDxExchange() {
-        return vendorsAgentDxExchange;
-    }
-
-    public void setVendorsAgentDxExchange(String vendorsAgentDxExchange) {
-        this.vendorsAgentDxExchange = vendorsAgentDxExchange;
-    }
-
     public LocalDate getPurchaser1DoB() {
         return purchaser1DoB;
     }
@@ -1476,5 +1481,11 @@ public class SdltImportRequest implements Serializable {
 
     public void setPurchaserAgentDxExchange(String purchaserAgentDxExchange) {
         this.purchaserAgentDxExchange = purchaserAgentDxExchange;
+    }
+    public void setPurchaser1Certificate(String purchaser1Certificate){
+        this.purchaser1Certificate = purchaser1Certificate;
+    }
+    public String getPurchaser1Certificate(){
+        return purchaser1Certificate;
     }
 }
